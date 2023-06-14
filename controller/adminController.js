@@ -107,6 +107,7 @@ const admin = {
       console.log(error.message);
     }
   },
+  
   createCategory: async (req, res) => {
     try {
       // function toTitleCase(str) {
