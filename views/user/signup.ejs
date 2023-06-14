@@ -1,0 +1,123 @@
+
+<%-include('../partials/header')-%>
+<main class="main">
+    <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17" style="background-image: url('assets/images/backgrounds/login-bg.jpg')">
+        <div class="container">
+            <div class="form-box">
+                <div class="form-tab">
+                    <ul class="nav nav-pills nav-fill" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="register-tab-2" data-toggle="tab" href="#register-2" role="tab" aria-controls="register-2" aria-selected="true">Register</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="register-2" role="tabpanel" aria-labelledby="register-tab-2">
+                            <form action="/usersignup" method="POST" onsubmit="return validate()">
+                                <div class="form-group">
+                                    <label for="name">Full Name <span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                    <label style="display: none;" id="name-error"></label>
+                                </div>
+                                <div class="form-group">
+                                    <!-- <label for="email">Email Address <span style="color: red;">*</span></label> -->
+                                    <input type="email" class="form-control" style="display: none;" value="<%= email %>" id="email" name="email" required>
+                                    <label style="display: none;" id="email-error"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone Number <span style="color: red;">*</span></label>
+                                    <input type="text" class="form-control" id="phone" name="phone" required>
+                                    <label style="display: none;" id="phone-error"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="password">Password <span style="color: red;">*</span></label>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                    <label style="display: none;" id="password-error"></label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirm-password">Confirm Password <span style="color: red;">*</span></label>
+                                    <input type="password" class="form-control" id="confirm-password" name="confirmpassword" required>
+                                    <label style="display: none;" id="confirm-password-error"></label>
+                                </div>
+                                <div class="form-footer">
+                                    <button type="submit" class="btn btn-outline-primary-2">
+                                        <span>SIGN UP</span>
+                                        <i class="icon-long-arrow-right"></i>
+                                    </button>
+                                    Already Have an Account? &nbsp;
+                                    <a href="/loginpage" class="signin-link">Sign In</a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+    function validate() {
+        var name = document.getElementById("name").value.trim();
+        var email = document.getElementById("email").value.trim();
+        var phone = document.getElementById("phone").value.trim();
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirm-password").value;
+        var nameFormat = /^[a-zA-Z ]+$/;
+        var emailFormat = /^\S+@\S+\.\S+$/;
+        var phoneFormat = /^\d{10}$/;
+        let nameError = document.getElementById("name-error");
+        let emailError = document.getElementById("email-error");
+        let phoneError = document.getElementById("phone-error");
+        let passwordError = document.getElementById("password-error");
+        let confirmPasswordError = document.getElementById("confirm-password-error");
+
+        if (!name.match(nameFormat)) {
+            nameError.style.display = '';
+            nameError.textContent = "Enter a valid name!";
+            nameError.style.color = "#ff4d4d";
+            return false;
+        } else {
+            nameError.style.display = 'none';
+        }
+
+        if (!email.match(emailFormat)) {
+            emailError.style.display = '';
+            emailError.textContent = "Enter a valid email address!";
+            emailError.style.color = "#ff4d4d";
+            return false;
+        } else {
+            emailError.style.display = 'none';
+        }
+
+        if (!phone.match(phoneFormat)) {
+            phoneError.style.display = '';
+            phoneError.textContent = "Enter a valid phone number!";
+            phoneError.style.color = "#ff4d4d";
+            return false;
+        } else {
+            phoneError.style.display = 'none';
+        }
+
+        if (password.length < 6) {
+            passwordError.style.display = '';
+            passwordError.textContent = "Password should be at least 6 characters!";
+            passwordError.style.color = "#ff4d4d";
+            return false;
+        } else {
+            passwordError.style.display = 'none';
+        }
+
+        if (password !== confirmPassword) {
+            confirmPasswordError.style.display = '';
+            confirmPasswordError.textContent = "Passwords don't match!";
+            confirmPasswordError.style.color = "#ff4d4d";
+            return false;
+        } else {
+            confirmPasswordError.style.display = 'none';
+        }
+
+        return true;
+    }
+</script>
+
+<%-include('../partials/footer')-%>

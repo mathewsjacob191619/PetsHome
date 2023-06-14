@@ -1,0 +1,449 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.js"></script>
+
+<% if (locals.messageAlert) { %>
+    <script>
+      Swal.fire({
+        icon: 'error',
+        title: '<%=messageAlert%>',
+        showConfirmButton: false,
+        timer: 2000
+      });
+    </script>
+<% } %>
+
+<footer class="footer footer-2">
+    <div class="footer-middle">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-lg-6">
+                    <div class="widget widget-about">
+                        <img src="data:image/jpeg;base64,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 " alt="Footer Logo" width="82" height="25">
+                        <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus. </p>
+                        
+                        <div class="widget-about-info">
+                            <div class="row">
+                                <div class="col-sm-6 col-md-4">
+                                    <span class="widget-about-title">Got Question? Call us 24/7</span>
+                                    <a href="tel:123456789">+0123 456 789</a>
+                                </div><!-- End .col-sm-6 -->
+                                <div class="col-sm-6 col-md-8">
+                                    <span class="widget-about-title">Payment Method</span>
+                                    <figure class="footer-payments">
+                                        <img src="assets/images/payments.png" alt="Payment methods" width="272" height="20">
+                                    </figure><!-- End .footer-payments -->
+                                </div><!-- End .col-sm-6 -->
+                            </div><!-- End .row -->
+                        </div><!-- End .widget-about-info -->
+                    </div><!-- End .widget about-widget -->
+                </div><!-- End .col-sm-12 col-lg-3 -->
+
+                <div class="col-sm-4 col-lg-2">
+                    <div class="widget">
+                        <h4 class="widget-title">Information</h4><!-- End .widget-title -->
+
+                        <ul class="widget-list">
+                            <li><a href="about.html">About Molla</a></li>
+                            <li><a href="#">How to shop on Molla</a></li>
+                            <li><a href="faq.html">FAQ</a></li>
+                            <li><a href="contact.html">Contact us</a></li>
+                            <li><a href="login.html">Log in</a></li>
+                        </ul><!-- End .widget-list -->
+                    </div><!-- End .widget -->
+                </div><!-- End .col-sm-4 col-lg-3 -->
+
+                <div class="col-sm-4 col-lg-2">
+                    <div class="widget">
+                        <h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
+
+                        <ul class="widget-list">
+                            <li><a href="#">Payment Methods</a></li>
+                            <li><a href="#">Money-back guarantee!</a></li>
+                            <li><a href="#">Returns</a></li>
+                            <li><a href="#">Shipping</a></li>
+                            <li><a href="#">Terms and conditions</a></li>
+                            <li><a href="#">Privacy Policy</a></li>
+                        </ul><!-- End .widget-list -->
+                    </div><!-- End .widget -->
+                </div><!-- End .col-sm-4 col-lg-3 -->
+
+                <div class="col-sm-4 col-lg-2">
+                    <div class="widget">
+                        <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
+
+                        <ul class="widget-list">
+                            <li><a href="#">Sign In</a></li>
+                            <li><a href="cart.html">View Cart</a></li>
+                            <li><a href="#">My Wishlist</a></li>
+                            <li><a href="#">Track My Order</a></li>
+                            <li><a href="#">Help</a></li>
+                        </ul><!-- End .widget-list -->
+                    </div><!-- End .widget -->
+                </div><!-- End .col-sm-64 col-lg-3 -->
+            </div><!-- End .row -->
+        </div><!-- End .container -->
+    </div><!-- End .footer-middle -->
+
+    <div class="footer-bottom">
+        <div class="container">
+            <p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p><!-- End .footer-copyright -->
+            <ul class="footer-menu">
+                <li><a href="#">Terms Of Use</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+            </ul><!-- End .footer-menu -->
+
+            <div class="social-icons social-icons-color">
+                <span class="social-label">Social Media</span>
+                <a href="#" class="social-icon social-facebook" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
+                <a href="#" class="social-icon social-twitter" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
+                <a href="#" class="social-icon social-instagram" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
+                <a href="#" class="social-icon social-youtube" title="Youtube" target="_blank"><i class="icon-youtube"></i></a>
+                <a href="#" class="social-icon social-pinterest" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
+            </div><!-- End .soial-icons -->
+        </div><!-- End .container -->
+    </div><!-- End .footer-bottom -->
+</footer><!-- End .footer -->
+</div><!-- End .page-wrapper -->
+<button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
+
+<div class="mobile-menu-container">
+<div class="mobile-menu-wrapper">
+    <span class="mobile-menu-close"><i class="icon-close"></i></span>
+
+    <form action="#" method="get" class="mobile-search">
+        <label for="mobile-search" class="sr-only">Search</label>
+        <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Search in..." required>
+        <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+    </form>
+    
+    <nav class="mobile-nav">
+        <ul class="mobile-menu">
+            <li class="active">
+                <a href="index.html">Home</a>
+
+                <ul>
+                    <li><a href="index-1.html">01 - furniture store</a></li>
+                    <li><a href="index-2.html">02 - furniture store</a></li>
+                    <li><a href="index-3.html">03 - electronic store</a></li>
+                    <li><a href="index-4.html">04 - electronic store</a></li>
+                    <li><a href="index-5.html">05 - fashion store</a></li>
+                    <li><a href="index-6.html">06 - fashion store</a></li>
+                    <li><a href="index-7.html">07 - fashion store</a></li>
+                    <li><a href="index-8.html">08 - fashion store</a></li>
+                    <li><a href="index-9.html">09 - fashion store</a></li>
+                    <li><a href="index-10.html">10 - shoes store</a></li>
+                    <li><a href="index-11.html">11 - furniture simple store</a></li>
+                    <li><a href="index-12.html">12 - fashion simple store</a></li>
+                    <li><a href="index-13.html">13 - market</a></li>
+                    <li><a href="index-14.html">14 - market fullwidth</a></li>
+                    <li><a href="index-15.html">15 - lookbook 1</a></li>
+                    <li><a href="index-16.html">16 - lookbook 2</a></li>
+                    <li><a href="index-17.html">17 - fashion store</a></li>
+                    <li><a href="index-18.html">18 - fashion store (with sidebar)</a></li>
+                    <li><a href="index-19.html">19 - games store</a></li>
+                    <li><a href="index-20.html">20 - book store</a></li>
+                    <li><a href="index-21.html">21 - sport store</a></li>
+                    <li><a href="index-22.html">22 - tools store</a></li>
+                    <li><a href="index-23.html">23 - fashion left navigation store</a></li>
+                    <li><a href="index-24.html">24 - extreme sport store</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="category.html">Shop</a>
+                <ul>
+                    <li><a href="category-list.html">Shop List</a></li>
+                    <li><a href="category-2cols.html">Shop Grid 2 Columns</a></li>
+                    <li><a href="category.html">Shop Grid 3 Columns</a></li>
+                    <li><a href="category-4cols.html">Shop Grid 4 Columns</a></li>
+                    <li><a href="category-boxed.html"><span>Shop Boxed No Sidebar<span class="tip tip-hot">Hot</span></span></a></li>
+                    <li><a href="category-fullwidth.html">Shop Fullwidth No Sidebar</a></li>
+                    <li><a href="product-category-boxed.html">Product Category Boxed</a></li>
+                    <li><a href="product-category-fullwidth.html"><span>Product Category Fullwidth<span class="tip tip-new">New</span></span></a></li>
+                    <li><a href="cart.html">Cart</a></li>
+                    <li><a href="checkout.html">Checkout</a></li>
+                    <li><a href="wishlist.html">Wishlist</a></li>
+                    <li><a href="#">Lookbook</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="product.html" class="sf-with-ul">Product</a>
+                <ul>
+                    <li><a href="product.html">Default</a></li>
+                    <li><a href="product-centered.html">Centered</a></li>
+                    <li><a href="product-extended.html"><span>Extended Info<span class="tip tip-new">New</span></span></a></li>
+                    <li><a href="product-gallery.html">Gallery</a></li>
+                    <li><a href="product-sticky.html">Sticky Info</a></li>
+                    <li><a href="product-sidebar.html">Boxed With Sidebar</a></li>
+                    <li><a href="product-fullwidth.html">Full Width</a></li>
+                    <li><a href="product-masonry.html">Masonry Sticky Info</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="#">Pages</a>
+                <ul>
+                    <li>
+                        <a href="about.html">About</a>
+
+                        <ul>
+                            <li><a href="about.html">About 01</a></li>
+                            <li><a href="about-2.html">About 02</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="contact.html">Contact</a>
+
+                        <ul>
+                            <li><a href="contact.html">Contact 01</a></li>
+                            <li><a href="contact-2.html">Contact 02</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="login.html">Login</a></li>
+                    <li><a href="faq.html">FAQs</a></li>
+                    <li><a href="404.html">Error 404</a></li>
+                    <li><a href="coming-soon.html">Coming Soon</a></li>
+                </ul>
+            </li>
+            <li>
+                <a href="blog.html">Blog</a>
+
+                <ul>
+                    <li><a href="blog.html">Classic</a></li>
+                    <li><a href="blog-listing.html">Listing</a></li>
+                    <li>
+                        <a href="#">Grid</a>
+                        <ul>
+                            <li><a href="blog-grid-2cols.html">Grid 2 columns</a></li>
+                            <li><a href="blog-grid-3cols.html">Grid 3 columns</a></li>
+                            <li><a href="blog-grid-4cols.html">Grid 4 columns</a></li>
+                            <li><a href="blog-grid-sidebar.html">Grid sidebar</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">Masonry</a>
+                        <ul>
+                            <li><a href="blog-masonry-2cols.html">Masonry 2 columns</a></li>
+                            <li><a href="blog-masonry-3cols.html">Masonry 3 columns</a></li>
+                            <li><a href="blog-masonry-4cols.html">Masonry 4 columns</a></li>
+                            <li><a href="blog-masonry-sidebar.html">Masonry sidebar</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">Mask</a>
+                        <ul>
+                            <li><a href="blog-mask-grid.html">Blog mask grid</a></li>
+                            <li><a href="blog-mask-masonry.html">Blog mask masonry</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">Single Post</a>
+                        <ul>
+                            <li><a href="single.html">Default with sidebar</a></li>
+                            <li><a href="single-fullwidth.html">Fullwidth no sidebar</a></li>
+                            <li><a href="single-fullwidth-sidebar.html">Fullwidth with sidebar</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="elements-list.html">Elements</a>
+                <ul>
+                    <li><a href="elements-products.html">Products</a></li>
+                    <li><a href="elements-typography.html">Typography</a></li>
+                    <li><a href="elements-titles.html">Titles</a></li>
+                    <li><a href="elements-banners.html">Banners</a></li>
+                    <li><a href="elements-product-category.html">Product Category</a></li>
+                    <li><a href="elements-video-banners.html">Video Banners</a></li>
+                    <li><a href="elements-buttons.html">Buttons</a></li>
+                    <li><a href="elements-accordions.html">Accordions</a></li>
+                    <li><a href="elements-tabs.html">Tabs</a></li>
+                    <li><a href="elements-testimonials.html">Testimonials</a></li>
+                    <li><a href="elements-blog-posts.html">Blog Posts</a></li>
+                    <li><a href="elements-portfolio.html">Portfolio</a></li>
+                    <li><a href="elements-cta.html">Call to Action</a></li>
+                    <li><a href="elements-icon-boxes.html">Icon Boxes</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav><!-- End .mobile-nav -->
+
+    <div class="social-icons">
+        <a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
+        <a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
+        <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+        <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
+    </div><!-- End .social-icons -->
+</div><!-- End .mobile-menu-wrapper -->
+</div><!-- End .mobile-menu-container -->
+
+<!-- Sign in / Register Modal -->
+<div class="modal fade" id="signin-modal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+        <div class="modal-body">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true"><i class="icon-close"></i></span>
+            </button>
+
+            <div class="form-box">
+                <div class="form-tab">
+                    <ul class="nav nav-pills nav-fill nav-border-anim" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin" role="tab" aria-controls="signin" aria-selected="true">Sign In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Register</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="tab-content-5">
+                        <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
+                            <form action="#">
+                                <div class="form-group">
+                                    <label for="singin-email">Username or email address *</label>
+                                    <input type="text" class="form-control" id="singin-email" name="singin-email" required>
+                                </div><!-- End .form-group -->
+
+                                <div class="form-group">
+                                    <label for="singin-password">Password *</label>
+                                    <input type="password" class="form-control" id="singin-password" name="singin-password" required>
+                                </div><!-- End .form-group -->
+
+                                <div class="form-footer">
+                                    <button type="submit" class="btn btn-outline-primary-2">
+                                        <span>LOG IN</span>
+                                        <i class="icon-long-arrow-right"></i>
+                                    </button>
+
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="signin-remember">
+                                        <label class="custom-control-label" for="signin-remember">Remember Me</label>
+                                    </div><!-- End .custom-checkbox -->
+
+                                    <a href="#" class="forgot-link">Forgot Your Password?</a>
+                                </div><!-- End .form-footer -->
+                            </form>
+                            <div class="form-choice">
+                                <p class="text-center">or sign in with</p>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <a href="#" class="btn btn-login btn-g">
+                                            <i class="icon-google-plus-g"></i>
+                                            Login With Google
+                                        </a>
+                                    </div><!-- End .col-6 -->
+                                    <div class="col-sm-6">
+                                        <a href="#" class="btn btn-login btn-f">
+                                            <i class="icon-facebook-f"></i>
+                                            Login With Facebook
+                                        </a>
+                                    </div><!-- End .col-6 -->
+                                </div><!-- End .row -->
+                            </div><!-- End .form-choice -->
+                        </div><!-- .End .tab-pane -->
+                        <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+                            <form action="#">
+                                <div class="form-group">
+                                    <label for="register-email">Your email address *</label>
+                                    <input type="email" class="form-control" id="register-email" name="register-email" required>
+                                </div><!-- End .form-group -->
+
+                                <div class="form-group">
+                                    <label for="register-password">Password *</label>
+                                    <input type="password" class="form-control" id="register-password" name="register-password" required>
+                                </div><!-- End .form-group -->
+
+                                <div class="form-footer">
+                                    <button type="submit" class="btn btn-outline-primary-2">
+                                        <span>SIGN UP</span>
+                                        <i class="icon-long-arrow-right"></i>
+                                    </button>
+
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="register-policy" required>
+                                        <label class="custom-control-label" for="register-policy">I agree to the <a href="#">privacy policy</a> *</label>
+                                    </div><!-- End .custom-checkbox -->
+                                </div><!-- End .form-footer -->
+                            </form>
+                            <div class="form-choice">
+                                <p class="text-center">or sign in with</p>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <a href="#" class="btn btn-login btn-g">
+                                            <i class="icon-google-plus-g"></i>
+                                            Login With Google
+                                        </a>
+                                    </div><!-- End .col-6 -->
+                                    <div class="col-sm-6">
+                                        <a href="#" class="btn btn-login  btn-f">
+                                            <i class="icon-facebook-f"></i>
+                                            Login With Facebook
+                                        </a>
+                                    </div><!-- End .col-6 -->
+                                </div><!-- End .row -->
+                            </div><!-- End .form-choice -->
+                        </div><!-- .End .tab-pane -->
+                    </div><!-- End .tab-content -->
+                </div><!-- End .form-tab -->
+            </div><!-- End .form-box -->
+        </div><!-- End .modal-body -->
+    </div><!-- End .modal-content -->
+</div><!-- End .modal-dialog -->
+</div><!-- End .modal -->
+
+
+
+
+
+
+<!-- <div class="container newsletter-popup-container mfp-hide" id="newsletter-popup-form">
+<div class="row justify-content-center">
+    <div class="col-10">
+        <div class="row no-gutters bg-white newsletter-popup-content">
+            <div class="col-xl-3-5col col-lg-7 banner-content-wrap">
+                <div class="banner-content text-center">
+                    <img src="assets/images/popup/newsletter/logo.png" class="logo" alt="logo" width="60" height="15">
+                    <h2 class="banner-title">get <span>25<light>%</light></span> off</h2>
+                    <p>Subscribe to the Molla eCommerce newsletter to receive timely updates from your favorite products.</p>
+                    <form action="#">
+                        <div class="input-group input-group-round">
+                            <input type="email" class="form-control form-control-white" placeholder="Your Email Address" aria-label="Email Adress" required>
+                            <div class="input-group-append">
+                                <button class="btn" type="submit"><span>go</span></button>
+                            </div>.End .input-group-append 
+                        </div> .End .input-group 
+                    </form>
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="register-policy-2" required>
+                        <label class="custom-control-label" for="register-policy-2">Do not show this popup again</label>
+                    </div> End .custom-checkbox 
+                </div>
+            </div>
+            <div class="col-xl-2-5col col-lg-5 ">
+                <img src="assets/images/popup/newsletter/img-1.jpg" class="newsletter-img" alt="newsletter">
+            </div>
+        </div>
+    </div>
+</div>
+</div> -->
+<!-- Plugins JS File -->
+<script src="assets/js/jquery.min.js"></script>
+<script src="assets/js/bootstrap.bundle.min.js"></script>
+<script src="assets/js/jquery.hoverIntent.min.js"></script>
+<script src="assets/js/jquery.waypoints.min.js"></script>
+<script src="assets/js/superfish.min.js"></script>
+<script src="assets/js/owl.carousel.min.js"></script>
+<script src="assets/js/jquery.plugin.min.js"></script>
+<script src="assets/js/jquery.magnific-popup.min.js"></script>
+<script src="assets/js/jquery.countdown.min.js"></script>
+<!-- Main JS File -->
+<script src="assets/js/main.js"></script>
+<script src="assets/js/demos/demo-8.js"></script>
+</body>
+
+
+<!-- molla/index-8.html  22 Nov 2019 09:57:25 GMT -->
+</html>

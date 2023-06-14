@@ -1,0 +1,108 @@
+<%- include('../partials/admin/header') -%>
+
+    <section class="content-main">
+        <form action="/admin/updateproduct" method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-9">
+                    <div class="content-header">
+                        <h2 class="content-title">Update Existing Product</h2>
+                        <div>
+                            <!-- <button class="btn btn-light rounded font-sm mr-5 text-body hover-up">Save to draft</button> -->
+                            <button type="submit" class="btn btn-md rounded font-sm hover-up">Update</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Basic</h4>
+                        </div>
+                        <div class="card-body">   
+                                <input type="hidden" name="id" value="<%=productData._id%>">                         
+                                <div class="mb-4">                                    
+                                    <label for="product_name" class="form-label">Product title</label>
+                                    <input type="text" value="<%=productData.productname%>" name="productname" class="form-control" id="product_name">
+                                </div>
+                                <div class="mb-4">
+                                    <label class="form-label">Description</label>
+                                    <textarea name="productdescription" class="form-control" rows="4"><%=productData.productdescription%></textarea>
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-4">
+                                            <label class="form-label">Price</label>
+                                            <div class="row gx-2">
+                                                <input value="<%=productData.productprice%>" name="productprice" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-4">
+                                            <label class="form-label">Quantity</label>
+                                            <input value="<%=productData.productquantity%>" type="number" name="productquantity" class="form-control">
+                                        </div>
+                                    </div>                                    
+                                </div>                                
+                        </div>
+                    </div> <!-- card end// -->                    
+                </div>
+                <div class="col-lg-3">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Media</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="input-upload">
+                                <img src="asset/imgs/theme/upload.svg" alt="">
+                                <input class="form-control" type="file" name="files" multiple>
+                            </div>
+                        </div>
+                    </div> <!-- card end// -->
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Organization</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row gx-2">
+                                <div class="col-sm-12 mb-3">
+                                    <label class="form-label">Category</label>
+                                    <select name="productcategory" class="form-select">
+                                        <option> <%=productData.productcategory%> </option>
+                                        <% categories.map((items)=>{ %>
+                                            <option>
+                                                <%= items.categoryName %>
+                                            </option>
+                                        <% }) %>
+                                    </select>
+                                </div>
+                                <div class="col-sm-12 mb-3">
+                                    <label class="form-label">Brand</label>
+                                    <select name="productbrand" class="form-select">
+                                        <option> <%=productData.productbrand%> </option>
+                                        <option>Royal Canin </option>
+                                        <option> Whiskas </option>
+                                        <option> Pedigree </option>
+                                        <option>zupreem</option>
+                                        <!-- <% categories.map((items)=>{ %>
+                                            <option>
+                                                <%= items.productbrand %>
+                                            </option>
+                                        <% }) %> -->
+                                        <!-- <option> Samsung </option>
+                                        <option> One + </option> -->
+                                    </select>
+                                </div>
+                            </div> <!-- row.// -->
+                        </div>
+                    </div> <!-- card end// -->
+
+
+
+                    
+                    
+                </div>
+            </div>
+        </form>
+    </section> <!-- content-main end// -->
+        
+<%- include('../partials/admin/footer') -%>
