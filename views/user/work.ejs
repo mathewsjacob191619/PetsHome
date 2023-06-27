@@ -1,0 +1,311 @@
+<%-include('../partials/header')-%>
+
+
+<main class="main">
+    <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">Checkout<span>Shop</span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/cart">Cart</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="page-content">
+        <div class="checkout">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-9">
+                        
+                        <table id="myTable" class="table table-cart table-mobile">
+                            <% if (addresses.length > 0) { %>
+                            <h3 class="card-title my-2">Shipping Address</h3>
+                            <a class="nav-link" id="tab-add-link" href="/profile"
+                                        >Add New address<i class="icon-edit"></i
+                                    ></a>
+                            <!-- End .card-title -->
+                            <% addresses.reverse().forEach(function(address) { %>
+                            <tbody>
+                                <tr>
+                                <td class="product-col">
+                                    <input class="form-check-input mt-5 address" id="<%=address._id %>" type="radio" value="<%=address._id %>" name="customerAddress" required/>
+                
+                                    <p class="ml-5">
+                                    <strong><%= address.name %></strong>,<br> <%=address.address%>,<br>
+                                    <%=address.landmark%>, <br>
+                                    <%=address.city%>, <%=address.State%>. Pin:<%=address.Pincode%> <br>
+                                    Phone No:<%=address.phone%>
+                                    </p>
+                                </td>
+                                </tr> 
+                            </tbody>
+                            <% }); %>
+                            <% } else { %>
+                                    <h5>No Address Saved.</h5>
+                                    <a href="/profile" class="btn btn-outline-primary-2">
+                                        <span>ADD ADDRESS</span><i class="icon-long-arrow-right"></i>
+                                    </a>
+                            <% } %>
+                            </table>
+                            <!-- <div class="checkout-discount">
+                                <form action="#">
+                                    <input type="text" class="form-control" required id="checkout-discount-input">
+                                    <label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
+                                </form>
+                            </div> -->
+                            <div class="cart-discount">
+                                <form action="#">
+                                    <p style="color: green;" id="success"></p>
+                                    <p style="color: red;" id="invalid"></p>
+                                    <div class="input-group mt-2">                                        
+                                        <input type="text" class="form-control" id="couponcode" name="couponcode" placeholder="coupon code" />
+                                        <div class="input-group-append">
+                                            <button style="height: auto;margin-bottom: 1.3em;" class="couponbtn btn btn-outline-primary-2" type="button">
+                                                <i class="icon-long-arrow-right"></i>
+                                            </button>
+                                        </div><!-- .End .input-group-append -->
+                                    </div><!-- End .input-group -->
+                                </form>
+                            </div><!-- End .cart-discount -->
+                            <p class="mb-1">You Can use Any one coupon</p>
+                            <div class="row">
+                                <% coupons.forEach(coupon => { %>
+                                    <div class="col-lg-6">
+                                        <div class="card card-dashboard">
+                                            <div class="card-body" style="background-color: black; color: white;" >
+                                                <h3 class="card-title" style="color: white;" >Coupon Code: <%-coupon.couponCode%></h3>
+                                                 Discount Price : ₹ <%-coupon.couponAmount%><br>
+                                                 For Every Purchase above ₹ <%-coupon.minimumAmount%><br>
+                                                Coupon Valid until <%=new Date(coupon.expireDate).toLocaleDateString()%><br>
+                                            </div><!-- End .card-body -->
+                                        </div><!-- End .card-dashboard -->
+                                    </div><!-- End .col-lg-6 -->
+                                <% }) %>
+                            </div>
+                            <!-- <div  class="cart-bottom">
+                                <div class="cart-discount">
+                                    <p class="text-dark">
+                                        Apply coupon                                        
+                                    </p>
+                                    <div id="accordion"  class="card ">
+                                        <div class="card-header" id="headingTwo">
+                                            <h5 class="mb-0">
+                                            <button class="btn btn-link collapsed text-success" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                                click here
+                                            </button>
+                                            </h5>
+                                        </div>
+                                        <div id="collapseTwo" class="collapse " aria-labelledby="headingTwo" data-parent="#accordion">
+                                            <div class="card-body ">
+                                                <table class="table table-wishlist  table-mobile" style="width: 800px;">
+                                                    <thead>
+                                                        <tr>
+                                                        <th>Description</th>
+                                                        <th>Discount</th>
+                                                        <th>Minimum Amount</th>
+                                                        <th>Expire Date</th>
+                                                        <th>Apply Code</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% coupons.forEach(function(coupon) { %>
+                                                            <tr>
+                                                                <td class="product-col">
+                                                                    <div class="product">
+                                                                        <h3 class="product-title">
+                                                                            <a href="#"><%=coupon.couponDescription%></a>
+                                                                        </h3>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="stock-col"><%=coupon.couponAmount%></td>
+                                                                <td class="stock-col"><%=coupon.minimumAmount%></td>
+                                                                <td class="stock-col"><%=new Date(coupon.exprieDate).toLocaleDateString()%></td>
+                                                                <td >
+                                                                    <a class="btn btn-secondary"><%=coupon.couponCode%></a>
+                                                                </td>
+                                                        
+                                                            </tr>
+                                                        <% }); %>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div> -->
+                    </div><!-- End .col-lg-9 -->
+                    <aside class="col-lg-3">
+                        <div class="summary">
+                            <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
+
+                            <table id="protable" class="table table-summary">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    <%products.products.forEach((product)=>{%>
+                                    <tr>
+                                        <td><a href="#"><%=product.productid.productname%></a></td>
+                                        <td class="proprice">₹<%=product.productid.productprice*product.quantity%>.00</td>
+                                    </tr>
+                                    <%})%>
+                                </tbody>
+                            </table><!-- End .table table-summary -->
+                            <table class="table table-summary">
+                                <tbody>
+                                    <tr class="summary-subtotal">
+                                        <td>Subtotal:</td>
+                                        <td id="subtotal"></td>
+                                    </tr><!-- End .summary-subtotal -->
+                                    <tr>
+                                        <td>Coupon Discount:</td>
+                                        <td id="discount">₹0.00</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Shipping:</td>
+                                        <td>Free shipping</td>
+                                    </tr>
+                                    <tr class="summary-total">
+                                        <td>Total:</td>
+                                        <td id="finaltotal"></td>
+                                    </tr><!-- End .summary-total -->
+                                </tbody>
+                            </table><!-- End .table table-summary -->
+
+
+
+                            <div class="accordion-summary" id="accordion-payment">
+                                <div class="card">
+                                    <div class="card-header" id="heading-1">
+                                        <h2 class="card-title">
+                                            <a class="method" role="button" data-method="COD" value="COD" data-toggle="collapse" href="#collapse-1" aria-expanded="true" aria-controls="collapse-1">
+                                                Cash on delivery
+                                            </a>
+                                        </h2>
+                                    </div><!-- End .card-header -->
+                                    <div id="collapse-1" class="collapse show" aria-labelledby="heading-1" data-parent="#accordion-payment">
+                                        <div class="card-body">
+                                        </div><!-- End .card-body -->
+                                    </div><!-- End .collapse -->
+                                </div><!-- End .card -->
+                            
+                                <div class="card">
+                                    <div class="card-header" id="heading-4">
+                                        <h2 class="card-title">
+                                            <a class="collapsed method" value="Razorpay" role="button" data-method="Razorpay" data-toggle="collapse" href="#collapse-4" aria-expanded="false" aria-controls="collapse-4">
+                                                Razorpay
+                                            </a>
+                                        </h2>
+                                    </div><!-- End .card-header -->
+                                    <div id="collapse-4" class="collapse" aria-labelledby="heading-4" data-parent="#accordion-payment">
+                                        <div class="card-body">
+                                            
+                                        </div><!-- End .card-body -->
+                                    </div><!-- End .collapse -->
+                                </div><!-- End .card -->
+                                                            
+                                <!-- <div class="card">
+                                    <div class="card-header" id="heading-5">
+                                        <h2 class="card-title">
+                                            <a class="collapsed method" role="button" data-toggle="collapse" href="#collapse-5" aria-expanded="false" aria-controls="collapse-5">
+                                                Wallet
+                                            </a>
+                                        </h2>
+                                    </div>
+                                    <div id="collapse-5" class="collapse" aria-labelledby="heading-5" data-parent="#accordion-payment">
+                                        <div class="card-body">
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </div><!-- End .accordion -->
+
+                            <button type="submit" id="placeOrder" class="btn btn-outline-primary-2 btn-order btn-block">
+                                <span>Place Order</span>
+                            </button>
+                        </div><!-- End .summary -->
+                    </aside><!-- End .col-lg-3 -->
+                </div><!-- End .row -->
+            </div><!-- End .container -->
+        </div><!-- End .checkout -->
+    </div><!-- End .page-content -->
+</main><!-- End .main -->
+
+
+
+
+<%-include('../partials/footer')-%>
+
+
+// <script>
+
+
+
+    $(document).ready(function () {
+        update_amounts();
+    
+        function update_amounts() {
+          let subtotal = 0;
+          $("#protable > tbody > tr").each(function () {
+            let price = $(this)
+              .find(".proprice")
+              .text()
+              .replace(/[^\d\.]/g, "");
+            let total = parseInt(price);
+            //   console.log(price);
+            subtotal += total;
+            //   console.log(subtotal);
+          });
+    
+          let couponrs = 0;
+          let total = subtotal - couponrs;
+    
+          $("#subtotal").text("₹" + subtotal.toFixed(2));
+    
+          $("#finaltotal").text("₹" + total.toFixed(2));
+        }
+      });
+      
+        $('#placeOrder').click(function() {
+      const addressId = $('input[name="customerAddress"]:checked').val();
+      const paymentMethod = 'Cash on Delivery'; // Or retrieve it dynamically
+    
+      $.ajax({
+        url: '/placeOrder',
+        method: 'POST',
+        data: { addressId, paymentMethod },
+        success: function(response) {
+          // Handle the success response (e.g., show a success message, redirect to profile page)
+          Swal.fire({
+            title: 'Success',
+            text: response.message,
+            icon: 'success',
+            confirmButtonText: 'OK',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = '/profile';
+            }
+          });
+        },
+        error: function(error) {
+          // Handle the error response (e.g., show an error message)
+          Swal.fire({
+            title: 'Error',
+            text: 'Something went wrong. Please try again later.',
+            icon: 'error',
+            confirmButtonText: 'OK',
+          });
+        }
+      });
+    });
+</script> 

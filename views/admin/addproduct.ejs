@@ -96,7 +96,7 @@
             </div> card end// -->
                 </div>
                 <div class="col-lg-3">
-                    <div class="card mb-4">
+                    <!-- <div class="card mb-4">
                         <div class="card-header">
                             <h4>Media</h4>
                         </div>
@@ -106,7 +106,63 @@
                                 <input class="form-control" name="files" type="file" required multiple>
                             </div>
                         </div>
-                    </div> <!-- card end// -->
+                    </div> card end// -->
+
+                    <!-- <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Media</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="input-upload">
+                                <img id="image-preview" src="" alt="">
+                                <input id="file-input" class="form-control" name="files" type="file" required multiple>
+                            </div>
+                        </div>
+                    </div> -->
+
+
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Media</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="input-upload">
+                                <div class="image-preview-container">
+                                    <img id="image-preview-1" class="image-preview" src="" alt="">
+                                </div>
+                                <div class="image-preview-container">
+                                    <img id="image-preview-2" class="image-preview" src="" alt="">
+                                </div>
+                                <div class="image-preview-container">
+                                    <img id="image-preview-3" class="image-preview" src="" alt="">
+                                </div>
+                                <div class="image-preview-container">
+                                    <img id="image-preview-4" class="image-preview" src="" alt="">
+                                </div>
+                                <input id="file-input" class="form-control" name="files" type="file" required multiple>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    
+                    <!-- <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Media</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="input-upload">
+                                <div id="image-preview-container" class="image-preview-container"></div>
+                                <input id="file-input" class="form-control" name="files" type="file" required multiple>
+                            </div>
+                        </div>
+                    </div> -->
+                    
+
+
+
+
                     <div class="card mb-4">
                         <div class="card-header">
                             <h4>Organization</h4>
@@ -150,3 +206,116 @@
         </form>
     </section> <!-- content-main end// -->
     <%- include('../partials/admin/footer') -%>
+
+    <!-- <script>
+        // Get the file input element and image preview element
+        const fileInput = document.getElementById('file-input');
+        const imagePreview = document.getElementById('image-preview');
+    
+        // Add an event listener to the file input for the change event
+        fileInput.addEventListener('change', function() {
+            // Check if any files are selected
+            if (fileInput.files && fileInput.files[0]) {
+                // Create a FileReader object
+                const reader = new FileReader();
+    
+                // Set up the FileReader onload event
+                reader.onload = function(e) {
+                    // Set the src attribute of the image preview to the data URL
+                    imagePreview.src = e.target.result;
+                };
+    
+                // Read the selected file as a data URL
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        });
+    </script> -->
+
+
+    <script>
+        // Get the file input element and image preview elements
+        const fileInput = document.getElementById('file-input');
+        const imagePreviews = document.querySelectorAll('.image-preview');
+    
+        // Add an event listener to the file input for the change event
+        fileInput.addEventListener('change', function() {
+            // Check if any files are selected
+            if (fileInput.files && fileInput.files.length > 0) {
+                // Loop through each selected file
+                for (let i = 0; i < fileInput.files.length; i++) {
+                    const file = fileInput.files[i];
+                    // Create a FileReader object
+                    const reader = new FileReader();
+    
+                    // Set up the FileReader onload event
+                    reader.onload = function(e) {
+                        // Set the src attribute of the corresponding image preview to the data URL
+                        imagePreviews[i].src = e.target.result;
+                    };
+    
+                    // Read the selected file as a data URL
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+    </script>
+
+
+
+
+
+
+<!-- 
+<script>
+    // Get the file input element and image preview container
+    const fileInput = document.getElementById('file-input');
+    const imagePreviewContainer = document.getElementById('image-preview-container');
+
+    // Add an event listener to the file input for the change event
+    fileInput.addEventListener('change', function() {
+        // Clear the previous image previews
+        imagePreviewContainer.innerHTML = '';
+
+        // Check if any files are selected
+        if (fileInput.files && fileInput.files.length > 0) {
+            // Loop through each selected file
+            for (let i = 0; i < fileInput.files.length; i++) {
+                const file = fileInput.files[i];
+                // Create a FileReader object
+                const reader = new FileReader();
+
+                // Set up the FileReader onload event
+                reader.onload = function(e) {
+                    // Create the image preview element
+                    const imagePreview = document.createElement('img');
+                    imagePreview.classList.add('image-preview');
+                    imagePreview.src = e.target.result;
+
+                    // Create the delete button element
+                    const deleteButton = document.createElement('button');
+                    deleteButton.classList.add('delete-button');
+                    deleteButton.textContent = 'Delete';
+
+                    // Add event listener to delete button to remove the corresponding image preview
+                    deleteButton.addEventListener('click', function() {
+                        imagePreviewContainer.removeChild(previewContainer);
+                        // Remove the corresponding file from the file input's files array
+                        fileInput.files = Array.from(fileInput.files).filter((_, index) => index !== i);
+                    });
+
+                    // Create the container for the image preview and delete button
+                    const previewContainer = document.createElement('div');
+                    previewContainer.classList.add('preview-container');
+                    previewContainer.appendChild(imagePreview);
+                    previewContainer.appendChild(deleteButton);
+
+                    // Append the preview container to the image preview container
+                    imagePreviewContainer.appendChild(previewContainer);
+                };
+
+                // Read the selected file as a data URL
+                reader.readAsDataURL(file);
+            }
+        }
+    });
+</script> -->

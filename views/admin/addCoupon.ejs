@@ -1,0 +1,76 @@
+
+<%- include('../partials/admin/header') -%>
+
+
+        <section class="content-main">
+            <div class="row">
+                <div class="col-9">
+                    <div class="content-header">
+                        <h2 class="content-title">Add New Coupon</h2>
+                    </div>
+                </div>
+                <!-- <button class="btn btn-md rounded font-sm hover-up"  type="submit" >Add</button> -->
+                
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Add Coupon</h4>
+                        </div>
+                        <div class="card-body">
+                            <form action="/admin/addCoupon"  method="POST"  >
+                                <div class="mb-4">
+                                    <label for="product_name" class="form-label">Coupon code</label>
+                                    <input type="text" name="code" placeholder="Type here"  class="form-control" id="product_name">
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label class="form-label">Discount Price</label>
+                                            <div class="row gx-2">
+                                                <input placeholder="₹" name="discountprice" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label class="form-label">Min Purchase</label>
+                                            <input placeholder="₹" type="text" name="min_purchase" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label class="form-label">Expiry</label>
+                                            <input placeholder="" type="date" name="expiry" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Description</label>
+                                        <textarea placeholder="Type here" name="coupondescription" class="form-control" rows="4"></textarea>
+                                    </div>
+                                </div>
+                                <button class="btn btn-md rounded font-sm hover-up" type="submit">Add</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+  <!-- <div class="pagination-area mt-30 mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                        <li class="page-item"><a class="page-link" href="#">02</a></li>
+                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">16</a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                    </ul>
+                </nav>
+            </div> -->
+</section>
+<!-- content-main end// -->
+
+<%- include('../partials/admin/footer') -%>
+
+

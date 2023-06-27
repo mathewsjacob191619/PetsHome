@@ -93,14 +93,15 @@
 
                     <div class="header-right">
                         <div class="header-search">
+                            <form action="/search" method="post">
                             <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
-                            <form action="#" method="get">
+                            <form action="" method="post">
                                 <div class="header-search-wrapper">
                                     <label for="q" class="sr-only">Search</label>
-                                    <input type="search" class="form-control" name="q" id="q" placeholder="Search in..."
-                                        required>
+                                    <input type="search" class="form-control" name="name" id="q" placeholder="Search in..."required>
                                 </div><!-- End .header-search-wrapper -->
                             </form>
+                        </form>
                         </div><!-- End .header-search -->
 
 
@@ -112,6 +113,18 @@
 
                             </a>
 
+
+
+
+
+                           
+                        
+
+
+
+
+
+
                             <div class="dropdown-menu dropdown-menu-right">
                                 <!-- <div class="dropdown-cart-products"> -->
 
@@ -120,6 +133,7 @@
 
 
                                         <a href="/userlogout" class="btn btn-primary">LOGOUT</a>
+                                        <a href="/profile" class="btn btn-outline-primary-2"> Profile</a>
 
 
 
@@ -129,9 +143,26 @@
                                                 class="btn btn-outline-primary-2"><span>SignUp</span><i
                                                     class="icon-long-arrow-right"></i></a>
                                             <% } %>
-                                </div><!-- End .dropdown-cart-total -->
+                                </div> 
+                                <!-- <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
+                                    <% if(locals.title) {%>
+                                    
+                                    <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit
+                                        Profile</a>
+                                    <a class="dropdown-item text-danger" href="/userlogout"><i
+                                            class="material-icons md-exit_to_app"></i>Logout</a>
+                                            <%}else { %>
+                                                <a href="/loginpage" class="btn btn-primary">Login</a>
+                                                <a href="/signuppage"
+                                                    class="btn btn-outline-primary-2"><span>SignUp</span><i
+                                                        class="icon-long-arrow-right"></i></a>
+                                                        <% } %>
+                                </div> -->
+
+
+
                                 <!-- </div>End .cart-product -->
-                            </div><!-- End .dropdown-menu -->
+                            </div>
                         </div>
 
 
@@ -150,58 +181,8 @@
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-right">
-                                <!-- <div class="dropdown-cart-products">
-                                    <div class="product">
-                                        <div class="product-cart-details">
-                                            <h4 class="product-title">
-                                                <a href="product.html">Beige knitted elastic runner shoes</a>
-                                            </h4>
-
-                                            <span class="cart-product-info">
-                                                <span class="cart-product-qty">1</span>
-                                                x $84.00
-                                            </span>
-                                        </div>End .product-cart-details
-
-                                        <figure class="product-image-container">
-                                            <a href="product.html" class="product-image">
-                                                <img src="assets/images/products/cart/product-1.jpg" alt="product">
-                                            </a>
-                                        </figure>
-                                        <a href="#" class="btn-remove" title="Remove Product"><i
-                                                class="icon-close"></i></a>
-                                    </div>End .product
-
-                                    <div class="product">
-                                        <div class="product-cart-details">
-                                            <h4 class="product-title">
-                                                <a href="product.html">Blue utility pinafore denim dress</a>
-                                            </h4>
-
-                                            <span class="cart-product-info">
-                                                <span class="cart-product-qty">1</span>
-                                                x $76.00
-                                            </span>
-                                        </div>End .product-cart-details
-
-                                        <figure class="product-image-container">
-                                            <a href="product.html" class="product-image">
-                                                <img src="assets/images/products/cart/product-2.jpg" alt="product">
-                                            </a>
-                                        </figure>
-                                        <a href="#" class="btn-remove" title="Remove Product"><i
-                                                class="icon-close"></i></a>
-                                    </div>End .product
-                                </div>cEnd .cart-product
-
-                                <div class="dropdown-cart-total">
-                                    <span>Total</span>
-
-                                    <span class="cart-total-price">$160.00</span>
-                                </div>End .dropdown-cart-total -->
-
                                 <div class="dropdown-cart-action">
-                                    <a href="cart.html" class="btn btn-primary">View Cart</a>
+                                    <a href="/cart" class="btn btn-primary">View Cart</a>
                                     <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i
                                             class="icon-long-arrow-right"></i></a>
                                 </div><!-- End .dropdown-cart-total -->
@@ -211,3 +192,13 @@
                 </div><!-- End .container -->
             </div><!-- End .header-bottom -->
         </header><!-- End .header -->
+        
+
+
+
+
+
+
+
+
+

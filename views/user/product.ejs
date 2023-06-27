@@ -3,13 +3,20 @@
 <main class="main">
   <div class="page-content">
     <div class="container-fluid ">
+      
       <div class="products">
+
+        
         <div class="row">
+          
           <% productdetails.forEach((product) => { %>
           <div class="col-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2 ">
             <div class="product">
               <figure class="product-media">
-                <a href="product.html">
+                <%if(product.productquantity == 0) {%>
+                  <span class="product-label label-out">Out of Stock</span>
+              <%}%>
+                <a href="/productView?id=<%=product._id%>">
                   <img src="uploads/<%= product.productimages[0] %>" alt="Product image" class="product-image">
                 </a>
                 <div class="product-action-vertical">
@@ -19,7 +26,7 @@
                 </div><!-- End .product-action -->
 
                 <div class="product-action action-icon-top">
-                  <a href="#" class="btn-product btn-cart">
+                  <a href="/addToCart?id=<%=product._id%>" class="btn-product btn-cart">
                     <span>add to cart</span>
                   </a>
                 </div><!-- End .product-action -->
@@ -30,7 +37,7 @@
                   <a href="#"><%= product.productbrand %></a>
                 </div><!-- End .product-cat -->
                 <h3 class="product-title">
-                  <a href="product.html"><%= product.productname %></a>
+                  <a href="/productView?id=<%=product._id%>"><%= product.productname %></a>
                 </h3><!-- End .product-title -->
                 <div class="product-price">
                   ₹<%= product.productprice %>
@@ -44,8 +51,11 @@
               </div><!-- End .product-body -->
             </div><!-- End .product -->
           </div><!-- End .col-sm-6 col-lg-4 col-xl-3 -->
+          
           <% }) %>
+          
         </div><!-- End .row -->
+        
       </div><!-- End .products -->
     </div><!-- End .container-fluid -->
   </div><!-- End .page-content -->

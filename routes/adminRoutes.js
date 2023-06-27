@@ -59,7 +59,15 @@ admin_route.delete("/deleteProduct",adminAuth.isLogin, adminController.deletePro
 admin_route.get('/logout',adminAuth.isLogin,adminController.adminLogout)
 
 
+// order
+admin_route.get('/order',adminController.order)
+admin_route.get('/orderdetails',adminController.orderDetails)
+admin_route.post('/statusupdate',adminController.updateStatus)
 
+admin_route.get('/couponList',adminController.listCoupon)
+admin_route.get('/addCoupon',adminController.addCouponPage)
+admin_route.post('/addCoupon',adminController.addCoupon)
+admin_route.get('/editcouponpage',adminController.editCouponPage)
 module.exports=admin_route
 
 

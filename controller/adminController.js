@@ -3,6 +3,8 @@ const categoriesModel = require('../model/categoriesModel');
 const adminCollection = require('../model/mongodb')
 const bcrypt = require("bcrypt");
 const productModel = require('../model/productModel');
+const orderCollection = require("../model/orderModel");
+const couponModel = require('../model/couponModel');
 
 
 
@@ -74,7 +76,7 @@ const admin = {
     try {
       const Isvalid = req.session.admin_name
       if (Isvalid !== undefined) {
-      const userData = await adminCollection.find({})
+      const userData = await adminCollection.find({isAdmin:0})
       res.render('userlist', { data: userData })
     } else{
       res.redirect('/admin')
@@ -115,7 +117,7 @@ const admin = {
       //     return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
       //   });
       // }
-      const categoryname= toTitleCase(req.body.name)
+      const categoryname= toTitleCaseAndTrimmedStr(req.body.name)
       const categorycheck= await categoriesModel.findOne({categoryName:categoryname})
       if(!categorycheck){
       const createRes = await categoriesModel.create({
@@ -167,12 +169,12 @@ const admin = {
       //   });
       // }
 
-      const product= toTitleCase(req.body.productname)
+      const product= toTitleCaseAndTrimmedStr(req.body.productname)
       const productcheck= await productModel.findOne({productname:product})
       if(!productcheck){
       const newproduct = new productCollection({
-        productname: toTitleCase(req.body.productname),
-        productcategory: req.body.productcategory,
+        productname: toTitleCaseAndTrimmedStr(req.body.productname),
+       productcategory: req.body.productcategory,
         productbrand: req.body.productbrand,
         productquantity: req.body.productquantity,
         productprice: req.body.productprice,
@@ -215,9 +217,10 @@ const admin = {
       //     return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
       //   });
       // }
-      const product=toTitleCase(req.body.productname)
+      const product=toTitleCaseAndTrimmedStr(req.body.productname)
      
       const existingProduct=await productCollection.findOne({productname:product})
+      // const oldimage=await productCollection.findOne()
 
 if(!existingProduct){
       let dataobj;
@@ -240,7 +243,7 @@ if(!existingProduct){
       } else {
         //  ##for if admin not updating the image
         dataobj = {
-          productname: req.body.productname,
+          productname: product,
           productcategory: req.body.productcategory,
           productbrand: req.body.productbrand,
           productquantity: req.body.productquantity,
@@ -282,7 +285,142 @@ if(!existingProduct){
       console.log(error.message)
     }
   },
+  order:async(req,res)=>{
+    try {
+      const orders = await orderCollection.find({}).populate("userid").exec();
+      res.render("order",{orders: orders });
+    } catch (error) {
+      console.log(error.message);
+    }
+  },
+ 
+orderDetails: async (req, res) => {
+  try {
+    const orderid = req.query.id;
+    const orderDetails = await orderCollection
+      .findById({ _id: orderid })
+      .populate("products.productid")
+      .populate("address")
+      .populate("userid")
+      .exec();
+    res.render("orderDetails", { orderDetail: orderDetails });
+  } catch (error) {
+    res.render("error", { error: error.message });
+  }
+},
+// updateStatus:async(req,res)=>{
+//   try {
+//      const orderid = req.query.id;
+//       const orderDetails = await orderCollection
+//         .findById({ _id: orderid })
+//         .populate("products.productid")
+//         .populate("address")
+//         .populate("userid")
+//         .exec();
+//       res.render("orderDetails", { orderDetail: orderDetails });
+//     } catch (error) {
+//       res.render("error", { error: error.message });
+//     }
+//   },
+
+  updateStatus: async (req, res) => {
+    try {
+      const orderid = req.body.orderid;
+      const status = req.body.status;
+      const order = await orderCollection.findOne({ _id: orderid });
+      
+      let order_update;
+      console.log( order.paymentMethod);
+      if (status == "Delivered" && order.paymentMethod == "Cash on Delivery") {
+        order_update = await orderCollection.findByIdAndUpdate(
+          { _id: orderid },
+          { $set: { status: status, paymentStatus: "Paid" } }
+        );
+      } else {
+        order_update = await orderCollection.findByIdAndUpdate(
+          { _id: orderid },
+          { $set: { status: status } }
+        );
+      }
+
+      if (status == "Delivered") {
+        const deliveredDate = new Date();
+        await orderCollection.findByIdAndUpdate(
+          orderid,
+          { deliveredDate: deliveredDate },
+          { new: true }
+        );
+        // const completionTime = moment(deliveredDate).add(1, "minute");
+      //   const completionTime = moment(deliveredDate).add(7, "days");
+      //   setTimeout(async () => {
+      //     const updatedOrder = await orderCollection.findById(orderid);
+      //     if (
+      //       updatedOrder &&
+      //       updatedOrder.status !== "Completed" &&
+      //       updatedOrder.status !== "Return Requested" &&
+      //       updatedOrder.status !== "Returned"
+      //     ) {
+      //       updatedOrder.status = "Completed";
+      //       await updatedOrder.save();
+      //     }
+      //   }, completionTime.diff(moment()));
+      }
+
+      if (order_update) {
+        res.send({ message: "1" });
+      } else {
+        res.send({ message: "0" });
+      }
+  } catch (error) {
+    console.log(error.message);
+  }
+},
+
+listCoupon: async (req, res) => {
+  try {
+    let coupon = await couponModel.find({});
+    res.render("couponList", { coupons: coupon });
+  } catch (error) {
+    res.render("error", { error: error.message });
+  }
+},
+addCouponPage: async (req, res) => {
+  try {
+    res.render("addCoupon");
+  } catch (error) {
+    res.render("error", { error: error.message });
+  }
+},
+addCoupon: async (req, res) => {
+  try {
+    const coupon = new couponModel({
+      couponCode: req.body.code,
+      couponAmount: req.body.discountprice,
+      expireDate: req.body.expiry,
+      couponDescription: req.body.coupondescription,
+      minimumAmount: req.body.min_purchase,
+    });
+    coupon.save();
+    res.redirect("/admin/couponList");
+  } catch (error) {
+    res.render("error", { error: error.message });
+  }
+},
+editCouponPage: async (req, res) => {
+  try {
+    const coupon = await couponModel.findOne({ _id: req.query.id });
+    res.render("editCoupon", { coupon: coupon });
+  } catch (error) {
+    res.render("error", { error: error.message });
+  }
+},
+
+
+
 }
 
 module.exports = admin
+
+
+
 

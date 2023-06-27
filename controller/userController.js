@@ -6,6 +6,9 @@ const otpCollection = require("../model/otpModel");
 const otpGenerator = require("otp-generator");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
+const addressModel = require('../model/addressModel');
+const orderModel = require('../model/orderModel');
+const cartCollection=require('../model/cartModel')
 
 
 
@@ -13,13 +16,23 @@ const nodemailer = require("nodemailer");
 
 
 const userControl = {
-    main: (req, res) => {
+    main: async(req, res) => {
         try {
-            res.render('main')
+            const products = await productCollection.find({})
+            // const reversedProducts = products.reverse();
+         const title=req.session.user_id
+         if(title){
+            res.render('main',{products:products,title:title})
+         }else{
+            res.render('main',{products:products})
+         }
+            
+           
         } catch (error) {
             console.log(error.message);
         }
     },
+
     loginPage: (req, res) => {
         try {
             res.render("login");
@@ -32,23 +45,16 @@ const userControl = {
         res.render('signUp')
     },
     accountCreation: async (req, res) => {
+        const { name, email, phone } = req.body;
         try {
             const data = await collection.findOne({ email: req.body.email });
             if (!data) {
                 const hashedPassword = await bcrypt.hash(req.body.password, 10);
-            const data = new collection({
-                name: req.body.name,
-                email: req.body.email,
-                phone: req.body.phone,
-                // password: req.body.password,
-                password:hashedPassword,
-                isAdmin: 0
-            });
-
-            await data.save();
-            res.redirect("/userhome");
-            // req.session.user_id = data.name
-            // res.render('main', { title: req.session.user_id })
+                const data = new collection({ name, email, phone, password:hashedPassword, isAdmin: 0 });
+                await data.save();
+                res.redirect("/userhome");
+                // req.session.user_id = data.name
+                // res.render('main', { title: req.session.user_id })
 
             } else {
                 res.render("signup", { messageAlert: "Already Registered" });
@@ -87,31 +93,33 @@ const userControl = {
     // },
     userLogin: async (req, res) => {
         try {
-          const userdata = await collection.findOne({ email: req.body.email });
-          if (userdata) {
-            if (userdata.isVerified) {
-              if (!userdata.isBlocked) {
-                const passwordMatch = await bcrypt.compare(req.body.password, userdata.password);
-                if (passwordMatch) {
-                  req.session.user_id = userdata.name;
-                  res.render('main', { title: req.session.user_id });
-                  // res.redirect('/userhome');
+            const userdata = await collection.findOne({ email: req.body.email });
+            if (userdata) {
+                if (userdata.isVerified) {
+                    if (!userdata.isBlocked) {
+                        const passwordMatch = await bcrypt.compare(req.body.password, userdata.password);
+                        if (passwordMatch) {
+                            req.session.user_id = userdata._id;
+                            const products = await productCollection.find({})
+                            // res.render('main', { title: req.session.user_id,products: products});
+                            res.redirect('/')
+                            // res.redirect('/userhome');
+                        } else {
+                            res.render("login", { messageAlert: "Incorrect Password" });
+                        }
+                    } else {
+                        res.render("login", { messageAlert: "Account Blocked" });
+                    }
                 } else {
-                  res.render("login", { messageAlert: "Incorrect Password" });
+                    res.render("login", { messageAlert: "Verify Your Email" });
                 }
-              } else {
-                res.render("login", { messageAlert: "Account Blocked" });
-              }
             } else {
-              res.render("login", { messageAlert: "Verify Your Email" });
+                res.render("login", { messageAlert: "Incorrect Username" });
             }
-          } else {
-            res.render("login", { messageAlert: "Incorrect Username" });
-          }
         } catch (error) {
-          res.send(error.message);
+            res.send(error.message);
         }
-      },      
+    },
     userHome: async (req, res) => {
         try {
             const userId = req.session.user_id
@@ -175,9 +183,9 @@ const userControl = {
                     const salt = await bcrypt.genSalt(10);
                     Otp.otp = await bcrypt.hash(Otp.otp, salt);
 
-                    const sameEmail=req.body.email
-                    await otpCollection.deleteOne({email:sameEmail})
-                    
+                    const sameEmail = req.body.email
+                    await otpCollection.deleteOne({ email: sameEmail })
+
                     const result = await Otp.save();
                     // console.log(result.email);
                     res.render("verifyotp", { otpEmail: result.email });
@@ -228,7 +236,7 @@ const userControl = {
         try {
             const product = await productCollection.find();
             // console.log(products);
-            res.render('product', { productdetails: product,title:req.session.user_id })
+            res.render('product', { productdetails: product, title: req.session.user_id })
         } catch (error) {
             console.log(error.message);
         }
@@ -239,7 +247,7 @@ const userControl = {
         } catch (error) {
             console.log(error.message);
         }
-    },forgotPasswordOTP : async (req, res) => {
+    }, forgotPasswordOTP: async (req, res) => {
         try {
             const emails = await collection.findOne({ email: req.body.email })
             // console.log(emails)
@@ -291,18 +299,18 @@ const userControl = {
             console.log(error.message);
         }
     },
-    
-    fpOtpVerify:async(req,res)=>{
+
+    fpOtpVerify: async (req, res) => {
         try {
-            const email=req.body.email
-            const enteredOTP=req.body.otp
-            
-            if(email && enteredOTP){
-                const otpData= await otpCollection.findOne({email:email})
+            const email = req.body.email
+            const enteredOTP = req.body.otp
+
+            if (email && enteredOTP) {
+                const otpData = await otpCollection.findOne({ email: email })
                 if (otpData) {
                     const isMatch = await bcrypt.compare(enteredOTP, otpData.otp);
                     if (isMatch) {
-                        res.render('resetpassword',{email:email})
+                        res.render('resetpassword', { email: email })
                     } else {
                         console.log("fpOtpVerify section error");
 
@@ -311,28 +319,134 @@ const userControl = {
                     console.log("fpOtpVerify section error");
 
                 }
-            }else{
+            } else {
                 console.log("fpOtpVerify section error");
             }
         } catch (error) {
             console.log(error.message);
         }
     },
-    resetPassword:async(req,res)=>{
+    resetPassword: async (req, res) => {
         try {
 
             const hashedPassword = await bcrypt.hash(req.body.password, 10);
-            const email=req.body.email
+            const email = req.body.email
             // const password=req.body.password
             if (email && hashedPassword) {
                 //   const datas = await collection.updateOne({ _id: req.body.userId }, { $set: { isBlocked: parseInt(req.body.isValue) } })
 
 
-                const datas=await collection.updateOne({email:email},{$set:{password:hashedPassword}})
+                const datas = await collection.updateOne({ email: email }, { $set: { password: hashedPassword } })
                 res.render('login')
             } else {
                 console.log("error");
             }
+        } catch (error) {
+            console.log(error.message);
+        }
+    },
+    profile: async (req, res) => {
+        try {
+            let userId = req.session.user_id;
+            let userDetail = await collection.findOne({ _id: userId });
+            if (userId) {
+                const address = await addressModel.find({ userid: userId });
+                const success = req.flash("success");
+                const order = await orderModel
+                    .find({ userid: userId })
+                    .populate("products.productid")
+                    .populate("address")
+                    .exec();
+                res.render("dashboard", {
+                    title: userId,
+                    success: success[0],
+                    userDetail: userDetail,
+                    addresses: address,
+                    orders: order,
+                });
+            } else {
+                res.redirect("/login");
+            }
+        } catch (error) {
+            console.log(error.message);
+            //   res.render("error", { error: error.message });
+        }
+    },
+    orders: async (req, res) => {
+        try {
+            let userId = req.session.user_id
+            const order = await orderModel
+                .find({ userid: userId })
+                .populate("products.productid")
+                .exec();
+            res.render("order", {
+                title: userId,
+                orders: order,
+            });
+        } catch (error) {
+            console.log(error.message);
+        }
+    },
+    editProfile: async (req, res) => {
+        try {
+            let userid = req.session.user_id;
+            await collection.updateOne(
+                { _id: userid },
+                {
+                    $set: {
+                        name: req.body.name,
+                        email: req.body.email,
+                        phone: req.body.phone,
+                    },
+                }
+            );
+            req.flash("success", "User Details updated Successfully.");
+            res.redirect("/profile");
+        } catch (error) {
+            console.log(error.message);
+        }
+    },
+    editPage: async (req, res) => {
+        try {
+            let userId = req.session.user_id;
+            const user = await collection.findOne({ _id: userId });
+            res.render("editProfile", { C: userId, user: user });
+        } catch (error) {
+            console.log(error.message);
+        }
+    },
+    passworpage: (req, res) => {
+
+        try {
+            let userId = req.session.user_id;
+            let title = req.flash("title");
+            res.render("editPassword", { title: userId, messageAlert: title[0] });
+        } catch (error) {
+            console.log(error.message);
+        }
+    },
+    productView:async(req,res)=>{
+       try {
+        const productId=req.query.id;
+        console.log(productId);
+        
+        const userId=req.session.user_id
+        console.log(userId);
+        const product=await productCollection.findOne({_id:req.query.id})
+        // console.log(product);
+        let success = req.flash("success");
+        res.render('productView',{title:userId,product:product})
+
+       } catch (error) {
+        console.log(error.message);        
+       }
+    },
+    Search:async(req,res)=>{
+        try {
+            const proname = req.body.name;
+            let productnamelower= proname.toLowerCase().replace(/\s/g,"");
+            const productdetail = await productCollection.find({ productname: { $regex: new RegExp('.*' + productnamelower.toLowerCase() + '.*', 'i') }});
+            res.render('product',{productdetails:productdetail})
         } catch (error) {
             console.log(error.message);
         }

@@ -52,11 +52,49 @@
                             <h4>Media</h4>
                         </div>
                         <div class="card-body">
-                            <div class="input-upload">
-                                <img src="asset/imgs/theme/upload.svg" alt="">
-                                <input class="form-control" type="file" name="files" multiple>
+                            <div class="input-upload"> 
+                                <!-- <img src="asset/imgs/theme/upload.svg" alt=""> -->
+                                <input  class="form-control" type="file" name="files" multiple>
+
+                                <% for(let i=0; i<productData.productimages.length; i++) { %>
+                                    <div class="image-container">
+                                        <img src="uploads/<%= productData.productimages[i] %>" alt="Product Image">
+                                    </div> 
+                                     <% } %>
                             </div>
                         </div>
+<!-- 
+                        <div class="card-body">
+                            <div class="input-upload">
+                                >
+                        
+                                <% for(let i=0; i<productData.productimages.length; i++) { %>
+                                    <div class="image-container">
+                                        <img src="uploads/<%= productData.productimages[i] %>" alt="Product Image">
+                                        <button class="edit-button" data-image-index="<%= i %>">Edit</button>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div> -->
+
+
+
+<!-- 
+                        <div class="card-body">
+                            <div class="input-upload">
+                        
+                                <% for(let i=0; i<productData.productimages.length; i++) { %>
+                                    <div class="image-container">
+                                        <img src="uploads/<%= productData.productimages[i] %>" alt="Product Image">
+                                        <div class="image-options">
+                                            <button class="delete-button" data-image-index="<%= i %>">Delete</button>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            </div>
+                        </div>
+                         -->
+                        
                     </div> <!-- card end// -->
                     <div class="card mb-4">
                         <div class="card-header">
@@ -106,3 +144,15 @@
     </section> <!-- content-main end// -->
         
 <%- include('../partials/admin/footer') -%>
+
+
+<script>$(document).ready(function() {
+    $('.delete-button').on('click', function() {
+      var imageIndex = $(this).data('image-index');
+      // Perform the deletion action using the imageIndex, e.g., sending an AJAX request to delete the image from the server
+      // Remove the image container from the DOM after successful deletion
+      $(this).closest('.image-container').remove();
+    });
+  });
+  </script>
+

@@ -1,3 +1,4 @@
+const collection = require('../model/mongodb')
 const userAuthenticate={
     
 
@@ -23,6 +24,27 @@ const userAuthenticate={
                
                res.redirect('/login')
            }
+       },
+
+       isBlocked: async(req,res,next)=>{
+        try {
+          if (req.session.user_id) {
+            console.log(req.session.user_id);
+            const user= await collection.findOne({_id:req.session.user_id})
+            console.log("session checking"+user)
+        if (user.isBlocked==1) {
+            req.session.destroy()
+            console.log("user blocked");
+            res.render("main", { messageAlert: "Account Blocked" });
+        } else {
+           next()
+        }
+          } else {
+            next()
+          }
+        } catch (error) {
+            console.log(error.message);
+        }
        }
        
        }

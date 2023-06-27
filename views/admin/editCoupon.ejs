@@ -1,0 +1,77 @@
+
+<%- include('../partials/admin/header') -%>
+
+
+        <section class="content-main">
+            <div class="row">
+                <div class="col-9">
+                    <div class="content-header">
+                        <h2 class="content-title">Edit Coupon</h2>
+                    </div>
+                </div>
+                <!-- <button class="btn btn-md rounded font-sm hover-up"  type="submit" >Add</button> -->
+                
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <h4>Edit Coupon</h4>
+                        </div>
+                        <div class="card-body">
+                            <form action="/admin/addCoupon"  method="POST"  >
+                                <input type="hidden" value="<%=coupon._id%>" name="id">
+                                <div class="mb-4">
+                                    <label for="product_name" class="form-label">Coupon code</label>
+                                    <input type="text" name="code" value="<%=coupon.couponCode%>"  class="form-control" id="product_name">
+                                </div>
+                                <div class="row">
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label class="form-label">Discount Price</label>
+                                            <div class="row gx-2">
+                                                <input value="<%=coupon.couponAmount%>" name="discountprice" type="text" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label class="form-label">Min Purchase</label>
+                                            <input value="<%=coupon.minimumAmount%>" type="text" name="min_purchase" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4">
+                                        <div class="mb-4">
+                                            <label class="form-label">Expiry</label>
+                                            <input value="<%= coupon.expireDate ? coupon.expireDate.toISOString().split('T')[0] : '' %>" type="date" name="expiry" class="form-control">
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Description</label>
+                                        <textarea name="coupondescription" class="form-control" rows="4"><%=coupon.couponDescription%></textarea>
+                                    </div>
+                                </div>
+                                <button class="btn btn-md rounded font-sm hover-up" type="submit">Edit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+  <!-- <div class="pagination-area mt-30 mb-50">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-start">
+                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                        <li class="page-item"><a class="page-link" href="#">02</a></li>
+                        <li class="page-item"><a class="page-link" href="#">03</a></li>
+                        <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                        <li class="page-item"><a class="page-link" href="#">16</a></li>
+                        <li class="page-item"><a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a></li>
+                    </ul>
+                </nav>
+            </div> -->
+</section>
+<!-- content-main end// -->
+
+<%- include('../partials/admin/footer') -%>
+
+

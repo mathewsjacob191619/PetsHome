@@ -12,7 +12,12 @@ const categorySchema=new mongoose.Schema({
     status:{
         type:Boolean,
         default:true
-    }
+    },
+    isActive: {
+        type: Number,
+        required: true,
+        default: 1,
+      },
 })
 
 module.exports = categoryModel = mongoose.model('category',categorySchema)

@@ -9,6 +9,15 @@ const userController=require('../controller/userController')
 
 const userAuthenticate= require('../authentication/userAuthentication');
 
+const addressController = require('../controller/addressController');
+
+const cartController = require("../controller/cartController");
+
+const orderController= require('../controller/orderController')
+
+
+
+
 
 user_route.use(express.static('public'))
 
@@ -27,7 +36,7 @@ user_route.use(express.json())
 user_route.use(express.urlencoded({ extended: false }))
 user_route.use(flash())
 
-user_route.get('/',userAuthenticate.isLogout,userController.main)
+user_route.get('/',userController.main)
 
 user_route.get('/loginpage',userController.loginPage)
 
@@ -45,13 +54,47 @@ user_route.post('/otprequest',userController.otpRequest)
 
 user_route.post('/otpverify',userController.otpVerify)
 
-user_route.get('/products',userController.products)
+user_route.get('/products',userAuthenticate.isBlocked,userController.products)
 user_route.get('/forgotpassword',userController.forgotPassword)
 user_route.post('/forgotpasswordotp',userController.forgotPasswordOTP)
 
 user_route.post('/fpotpverify',userController.fpOtpVerify)
 
 user_route.post('/resetpassword',userController.resetPassword)
+
+
+
+
+
+
+user_route.get('/profile',userController.profile)
+user_route.get('/orders',userController.orders)
+user_route.get('/addresses',addressController.load)
+
+// user_route.get("/editProfile", userController.editProfile);
+user_route.get('/editProfile', userController.editPage);
+user_route.get("/changePassword",userController.passworpage);
+
+
+user_route.get('/addToCart',cartController.add);
+user_route.get('/cart',cartController.load)
+user_route.get('/deleteProCart',cartController.delete)
+user_route.get('/increment', cartController.increment)
+user_route.get('/decrement',cartController.decrement)
+user_route.get('/checkout',cartController.checkout)
+user_route.get('/addAddress',addressController.addpage)
+user_route.post('/addAddress',addressController.add)
+user_route.get('/editAddressPage',addressController.editAddressPage)
+user_route.post('/editAddress',cartController.editAddress)
+user_route.get('/productView',userController.productView)
+user_route.post('/placeOrder',orderController.place) 
+user_route.post('/search',userController.Search)
+user_route.post('/razorpay',orderController.createOrder)
+user_route.post('/checkvalidcoupon',cartController.validateCoupon)
+
+
+
+
 
 
 

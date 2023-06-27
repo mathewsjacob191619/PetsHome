@@ -1,8 +1,10 @@
+require('dotenv').config();
 const express=require('express')
 const app=express()
+const port= process.env.PORT||3005
 const mongoose = require('mongoose')
 
-mongoose.connect("mongodb://0.0.0.0:27017/register")
+mongoose.connect(process.env.dbconnect)
 .then(()=>{
     console.log("mongodb connected...");
 }).catch(()=>{
@@ -10,7 +12,7 @@ mongoose.connect("mongodb://0.0.0.0:27017/register")
 })
 
 
-const port= process.env.PORT||3005
+
 
 const userRoute=require('./routes/userRoutes')
 const adminRoute=require('./routes/adminRoutes')
