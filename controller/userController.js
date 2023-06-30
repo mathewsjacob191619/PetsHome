@@ -9,6 +9,7 @@ const nodemailer = require("nodemailer");
 const addressModel = require('../model/addressModel');
 const orderModel = require('../model/orderModel');
 const cartCollection=require('../model/cartModel')
+const walletCollection=require('../model/walletModel')
 
 
 
@@ -22,9 +23,9 @@ const userControl = {
             // const reversedProducts = products.reverse();
          const title=req.session.user_id
          if(title){
-            res.render('main',{products:products,title:title})
+            res.render('main',{products:products,latestProducts:products,title:title})
          }else{
-            res.render('main',{products:products})
+            res.render('main',{products:products,latestProducts:products})
          }
             
            
@@ -52,7 +53,7 @@ const userControl = {
                 const hashedPassword = await bcrypt.hash(req.body.password, 10);
                 const data = new collection({ name, email, phone, password:hashedPassword, isAdmin: 0 });
                 await data.save();
-                res.redirect("/userhome");
+                res.redirect("/");
                 // req.session.user_id = data.name
                 // res.render('main', { title: req.session.user_id })
 
@@ -447,6 +448,18 @@ const userControl = {
             let productnamelower= proname.toLowerCase().replace(/\s/g,"");
             const productdetail = await productCollection.find({ productname: { $regex: new RegExp('.*' + productnamelower.toLowerCase() + '.*', 'i') }});
             res.render('product',{productdetails:productdetail})
+        } catch (error) {
+            console.log(error.message);
+        }
+    },
+    wallet: async (req,res)=>{
+        try {
+            let userId = req.session.user_id;
+            const wallet = await walletCollection.findOne({ userid: userId });
+            res.render("wallet", {
+              title: userId,
+              wallet: wallet,
+            });
         } catch (error) {
             console.log(error.message);
         }

@@ -56,7 +56,12 @@
                                         <button class="cart-qty-plus" style="border: none; width: 25px;" data-proid="<%=product.productid._id%>"   type="button" >+</button>
                                     </td>
                                     <td class="total-col amount"></td>
-                                    <td class="remove-col"><a href="/deleteProCart?id=<%=product.productid._id%>&qty=<%=product.quantity%>" class="btn-remove"><i class="icon-close"></i></a></td>
+                                    <td class="remove-col">
+                                        <a href="/deleteProCart?id=<%=product.productid._id%>&qty=<%=product.quantity%>" class="btn-remove">
+                                            <i class="icon-close">
+                                            </i>
+                                        </a>
+                                    </td>
                                 </tr>
                                 <%})%>
                             </tbody>

@@ -48,6 +48,7 @@
                             </tr>
                         </thead>
                         <%orders.reverse().forEach((order)=>{%>
+                            <% console.log(orders); %>
                         <tbody>
                             <tr>
                                 <td><%- order._id.toString().slice(-4) %></td>

@@ -91,7 +91,9 @@ user_route.post('/placeOrder',orderController.place)
 user_route.post('/search',userController.Search)
 user_route.post('/razorpay',orderController.createOrder)
 user_route.post('/checkvalidcoupon',cartController.validateCoupon)
-
+user_route.post('/returnorder',orderController.returnRequest)
+user_route.post('/cancelorder',orderController.cancelRequest)
+user_route.get('/wallet',userController.wallet)
 
 
 

@@ -29,6 +29,9 @@
                                 <a class="nav-link active" id="tab-orders-link" href="/orders" role="tab" aria-controls="tab-orders" aria-selected="true">Orders</a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link" id="tab-orders-link" href="/wallet" role="tab" aria-controls="tab-orders" aria-selected="false">wallet</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link" id="tab-address-link" href="/addresses" role="tab" aria-controls="tab-address" aria-selected="false">Adresses</a>
                             </li>
                             <li class="nav-item">
@@ -54,8 +57,7 @@
                                                 <th>Price</th>
                                                 <th>Date</th>
                                                 <th>Status</th>
-                                                
-                                                <th></th>
+                                                <th>Action</th>
                                             </tr>
                                         </thead>
                                         <% orders.reverse().forEach(function(order) { %>
@@ -72,7 +74,8 @@
                                                                 <% } else { %>
                                                                     <img src="upload/img.webp" alt="Default Image" class="product-image" />
                                                                 <% } %>                                                                    
-                                                        </figure>                    
+                                                        </figure>    
+                                                                        
                                                         <h3 class="product-title">
                                                             <a href="/orderDetails?id=<%=order._id%>"><%=product.productid.productname %></a>
                                                         </h3>
@@ -80,26 +83,38 @@
                                                 </td>
                                                 <td class="price-col">₹<%=product.productid.productprice %>.00</td>
                                                 <td class="stock-col"><%=new Date(order.orderDate).toLocaleDateString()%></td>
+                                                <td class="price-col">
+                                                    <% if (order.status == "Delivered" || order.status == "Completed") { %>
+                                                        <span class="badge rounded-pill bg-success">Delivered</span>
+                                                    <% } else if (order.status == "Pending") { %>
+                                                        <span class="badge rounded-pill bg-warning"><%=order.status%></span>
+                                                    <% } else if (order.status == "Return Requested" || order.status == "Cancelled" || order.status == "Returned") { %>
+                                                        <span class="badge rounded-pill bg-danger"><%=order.status%></span>
+                                                    <%} else { %>
+                                                        <span class="badge rounded-pill bg-info"><%=order.status%></span>
+                                                    <%}%>
+
+                                                       
+                                                </td> 
+                                                
                                                 <td class="action-col">
                                                     <% if(order.status == "Delivered"){ %>
-                                                    <a data-returnorder="<%=order._id%>" class="btn  btn-outline-primary-2 return">RETURN</a>
-                                                    <% } else if(order.status == "Return") { %>
-                                                        <a  class="btn  btn-outline-primary-2">Order cancelled</a>
+                                                        <a href="#" id="returnorder" data-id="<%=order._id%>"><button class="btn btn-outline-warning return">RETURN</button></a>
+                                                    <% } else if(order.status == "Completed") { %>
+                                                        <button class="btn btn-info return" disabled>ORDER COMPLETED</button>
+                                                    <% } else if (order.status == "Cancelled") { %>
+                                                        <button class="btn btn-info return" disabled>CANCELLED</button>
+                                                    <% } else if (order.status == "Return Requested") { %>
+                                                        <button class="btn btn-warning return" disabled>WAITING</button>
+                                                    <% } else if (order.status == "Shipped") { %>
+                                                        <button class="btn btn-info return" disabled>CANCEL</button>
+                                                    <% } else if (order.status == "Returned") { %>
+                                                        <button class="btn btn-info return" disabled>RETURNED</button>
                                                     <% }  else { %>
-                                                        <a  class="btn  btn-outline-primary-2"><%=order.status%></a>
-                                                        <% } %>	
+                                                        <a href="#" id="cancelorder" data-id="<%=order._id%>"><button class="btn btn-outline-danger cancel">CANCEL</button></a>
+                                                    <% } %>
+                                                </td>
 
-                                                        <% if(order.paymentStatus=="Paid"){ %>
-                                                            <a  class="btn bg-success btn-outline-primary-2">Paid</a>
-                                                        <% }  else { %>
-                                                            <a  class="btn bg-danger btn-outline-primary-2">Unpaid</a>
-                                                            
-                                                        <% } %>	
-                                                </td> 
-                                                <% if(order.status == "Delivered" || order.status == "Return"){ %>															
-                                                <% }  else { %>
-                                                    <td class="remove-col"><button class="btn-remove cancelorder" value="<%=order._id%>"><i class="icon-close"></i></button></td>
-                                                <% } %>	
                                             </tr>													
                                         </tbody>
                                         <% }); %>
@@ -139,7 +154,7 @@
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes'
-            }).then((result)=>{
+            }).then((result)=>{ 
                 if(result.isConfirmed){
                     $.ajax({
                         url: "/cancelorder",
@@ -179,6 +194,7 @@
             var data = {
                 id: orderid,
             };
+            console.log(data);
             Swal.fire({
                 title: "Are you sure?",
                 text: "This action cannot undone!",
@@ -188,6 +204,7 @@
                 cancelButtonColor: '#d33',
                 confirmButtonText: 'Yes'
             }).then((result)=>{
+                console.log(result);
                 if(result.isConfirmed){
                     $.ajax({
                         url: "/returnorder",

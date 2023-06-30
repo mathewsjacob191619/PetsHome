@@ -7,7 +7,7 @@ const nocache = require("nocache");
 // const flash = require("connect-flash");
 const adminAuth= require('../authentication/adminAuthentication')
 
-
+const orderController=require('../controller/orderController')
 const adminController = require("../controller/adminController");
 // const adminAuthenticate = require("../authentication/adminAuthentication");
 
@@ -68,6 +68,7 @@ admin_route.get('/couponList',adminController.listCoupon)
 admin_route.get('/addCoupon',adminController.addCouponPage)
 admin_route.post('/addCoupon',adminController.addCoupon)
 admin_route.get('/editcouponpage',adminController.editCouponPage)
+admin_route.post('/returnapprove',orderController.approveReturn)
 module.exports=admin_route
 
 
