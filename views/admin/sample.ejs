@@ -1,5 +1,6 @@
-<%- include('../partials/header') %>
 
+
+<%- include('../adminpartials/header') %>
 <style>
     .filter-section {
   margin-bottom: 20px;
@@ -15,7 +16,104 @@
 
 </style>
 
-   <main class="">
+<nav>
+    <nav>
+        <ul class="menu-aside">
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/adminDashboard"> <i class="icon material-icons md-home"></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+           
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/products"> <i class="icon material-icons md-monetization_on"></i>
+                
+                    <span class="text">ProductList</span>
+                </a>
+               
+            </li>
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/order"> <i class="icon material-icons md-shopping_cart"></i>
+                
+                    <span class="text">Orders</span>
+                </a>
+               
+            </li>
+            
+    
+    
+         
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/userslist"> <i class="icon material-icons md-store"></i>
+                    <span class="text">Users</span>
+                </a>
+               
+            </li>
+            
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/Categories"> <i class="icon material-icons md-category"></i>
+                </i>
+                    <span class="text">Categories</span>
+                </a>
+               
+            </li>
+            
+            <li class="menu-item has-submenu">
+                <a class="menu-link" href="#" ><i class="icon material-icons md-local_offer"></i>
+                    <span class="text">Coupon</span>
+                </a>
+                <div class="submenu">
+                    <a href="/admin/couponList">Coupon List</a>
+                    <a href="/admin/addcoupon">Add Coupon</a>
+                </div>
+            </li>
+            <li class="menu-item ">
+                <a class="menu-link" href="/admin/salesReport"> <i class="icon material-icons md-stars"></i>
+                </i>
+                    <span class="text">Sales Report</span>
+                </a>
+               
+            </li>
+            <li class="menu-item ">
+              <a class="menu-link" href="#"> <i class="icon material-icons md-image"></i>
+              </i>
+                  <span class="text">Banner</span>
+              </a>
+             
+          </li>
+          <li class="menu-item ">
+            <a class="menu-link" href="/admin/offer"><i class="icon material-icons md-favorite"></i>
+
+            </i>
+                <span class="text">Offers</span>
+            </a>
+           
+        </li>
+        </ul>
+        <hr>
+        <ul class="menu-aside">
+            <!-- <li class="menu-item has-submenu">
+                <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
+                    <span class="text">Settings</span>
+                </a>
+                <div class="submenu">
+                    <a href="page-settings-1.html">Setting sample 1</a>
+                    <a href="page-settings-2.html">Setting sample 2</a>
+                </div>
+            </li> -->
+            <!-- <li class="menu-item">
+                <a class="menu-link" href="page-blank.html"> <i class="icon material-icons md-local_offer"></i>
+                    <span class="text"> Starter page </span>
+                </a>
+            </li> -->
+        </ul>
+        <br>
+        <br>
+    </nav>
+    </aside>
+   </nav>
+
+   <main class="main-wrap">
      
 <section class="content-main">
     <main class="main">
@@ -30,7 +128,7 @@
                     <!-- Filter options can be added here if needed -->
                     <div style="padding-left: 30px; padding-right: 30px;">
        
-                        <div class="container-fluid">
+                        <div class="container-fluid p-0">
                           <div class="row">
                             <div class="col-md-12 d-flex justify-content-end">
                               <div class="me-2">
@@ -75,18 +173,18 @@
                                 <th scope="col">MOD</th>
                                 <th scope="col">Total</th>
                             </tr>
-                        </thead>   
+                        </thead>
                         <tbody>
                             <% orders.forEach(function(order) { %>
-                                <% order.products.forEach(function(product) { %>
+                                <% order.product.forEach(function(products) { %>
                                     <% if (order.status === "Delivered") { %>
                                         <tr>
                                             <td><%= order._id.toString().substr(-5) %></td>
-                                            <td><b><%= order.userid.name %></b></td>
-                                            <td><%= product.productid.productname %></td>
+                                            <td><b><%= order.userId.name %></b></td>
+                                            <td><%= products.product_id.productname %></td>
                                             <td><%= new Date(order.orderDate).toLocaleDateString() %></td>
                                             <td><%= order.status %></td>
-                                            <td><%= order.totalAmount %></td>
+                                            <td><%= order.total %></td>
                                         </tr>
                                     <% } %>
                                 <% }); %>
@@ -102,10 +200,10 @@
             </main>
          </section>
       </main>
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
       <!-- <script>
@@ -182,6 +280,7 @@
 
 
       
+   
       $('#filter-btn').click(function() {
   const fromDate = new Date($('#from-date').val());
   const toDate = new Date($('#to-date').val());
@@ -192,8 +291,8 @@
   // Filter rows based on the date range
   table.find('tbody tr').each(function() {
     const dateString = $(this).find('td:nth-child(4)').text(); // Assuming "Date" is the 4th column
-    const date = new Date(dateString);
-
+    const date = moment(dateString, 'D/M/YYYY').toDate();
+    console.log(date);
     if (date >= fromDate && date <= toDate) {
       $(this).show();
     }
@@ -206,7 +305,7 @@ $('#reset-btn').click(function() {
   $('#to-date').val('');
   table.find('tbody tr').show();
 });
-
+    
     });
   </script>
   
@@ -283,5 +382,4 @@ $('#reset-btn').click(function() {
 
 
   
-
-      <%- include('../partials/footer') %>
+<%- include('../adminpartials/footer') %>

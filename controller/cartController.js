@@ -26,14 +26,15 @@ const cart = {
             let flag = 0;         
             const productId = req.query.id
             const userData = req.session.user_id
+           
             if(userData){
             const productDetail = await productCollection.findOne({ _id: productId })
 
-            console.log("pro id"+productId);
-            console.log("user data"+userData);
-            console.log("pro details"+productDetail);
+            // console.log("pro id"+productId);
+            // console.log("user data"+userData);
+            // console.log("pro details"+productDetail);
             if (productDetail.productquantity > 0) {
-              console.log("p quant"+productDetail.productquantity);
+              // console.log("p quant"+productDetail.productquantity);
                 const cart = await cartCollection.findOne({ userid: userData });
                 if (cart) {
                     const proExist = cart.products.findIndex((product) =>

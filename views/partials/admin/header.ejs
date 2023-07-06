@@ -20,6 +20,9 @@
     <!-- <link rel="shortcut icon" type="image/x-icon" href="asset/imgs/theme/favicon.svg"> -->
     <!-- Template CSS -->
     <link href="asset/css/main.css" rel="stylesheet" type="text/css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 
 <body>
@@ -116,6 +119,12 @@
                         <span class="text">Users</span>
                     </a>
                 </li>
+
+                <li class="menu-item" id="sales">
+                    <a class="menu-link" href="/admin/sales"> <i class="icon material-icons md-group"></i>
+                        <span class="text">Sales</span>
+                    </a>
+                </li>
                 <!-- <li class="menu-item has-submenu">
                     <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
                         <span class="text">Account</span>
@@ -162,6 +171,19 @@
             <br>
         </nav>
     </aside>
+    <style>
+        .filter-section {
+          margin-bottom: 20px;
+        }
+      
+        .filter-section label {
+          margin-right: 10px;
+        }
+      
+        .filter-section button {
+          margin-left: 10px;
+        }
+      </style>
     <main class="main-wrap">
         <header class="main-header navbar">
             <div class="col-search">

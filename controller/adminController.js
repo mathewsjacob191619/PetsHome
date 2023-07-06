@@ -202,72 +202,60 @@ const admin = {
   },
   updateProduct: async (req, res) => {
     try {
+      const product = toTitleCaseAndTrimmedStr(req.body.productname);
+      const updateProductId = req.body.id;
+      // console.log("product id " + updateProductId);
 
-      // const productId = req.body.id;
-      // const existingProduct = await productCollection.findById(productId);
-      
-      // if (existingProduct.productname === req.body.productname) {
-      //   return res.status(400).send({ success: false, messageAlert: 'Product name already exists. Update aborted.' });
-      // }
+      const existingProduct = await productCollection.findOne({ _id: updateProductId });
+      const otherProduct = await productCollection.findOne({ productname: product });
 
+      if (existingProduct && existingProduct._id.equals(otherProduct._id)) {
+        let dataobj;
+        const arrImages = [];
 
+        if (req.files.length > 0) {
+          for (let i = 0; i < req.files.length; i++) {
+            arrImages[i] = req.files[i].filename;
+          }
 
-      // function toTitleCase(str) {
-      //   return str.replace(/\b\w+/g, function(word) {
-      //     return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-      //   });
-      // }
-      const product=toTitleCaseAndTrimmedStr(req.body.productname)
-     
-      const existingProduct=await productCollection.findOne({productname:product})
-      // const oldimage=await productCollection.findOne()
-
-if(!existingProduct){
-      let dataobj;
-      const arrImages = [];
-      if (req.files.length > 0) {
-        for (let i = 0; i < req.files.length; i++) {
-          arrImages[i] = req.files[i].filename;
+          dataobj = {
+            productname: product,
+            productcategory: req.body.productcategory,
+            productbrand: req.body.productbrand,
+            productquantity: req.body.productquantity,
+            productprice: req.body.productprice,
+            productdescription: req.body.productdescription,
+            productimages: arrImages,
+          };
+        } else {
+          // For if the admin is not updating the image
+          dataobj = {
+            productname: product,
+            productcategory: req.body.productcategory,
+            productbrand: req.body.productbrand,
+            productquantity: req.body.productquantity,
+            productprice: req.body.productprice,
+            productdescription: req.body.productdescription,
+          };
         }
-    
-        dataobj = {
-          productname: product,
-          productcategory: req.body.productcategory,
-          productbrand: req.body.productbrand,
-          productquantity: req.body.productquantity,
-          productprice: req.body.productprice,
-          productdescription: req.body.productdescription,
-          productimages: arrImages,
-        };
-      
+
+         await productCollection.findByIdAndUpdate(
+          { _id: updateProductId },
+          { $set: dataobj },
+          { new: true }
+        );
+
+        res.redirect("/admin/productList");
       } else {
-        //  ##for if admin not updating the image
-        dataobj = {
-          productname: product,
-          productcategory: req.body.productcategory,
-          productbrand: req.body.productbrand,
-          productquantity: req.body.productquantity,
-          productprice: req.body.productprice,
-          productdescription: req.body.productdescription,
-        };
+        const productDetails = await productCollection.find({});
+        res.render('productlist', { messageAlert: "This product already exists", products: productDetails });
       }
-      const product_data = await productCollection.findByIdAndUpdate(
-        { _id: req.body.id },
-        { $set: dataobj },
-        { new: true }
-      );
-      res.redirect("/admin/productList");
-}else{
-  // const categories = await categoriesModel.find({ status: true }) 
-  // const productData=await productCollection.findOne({ productname: req.body.productname})
-  const productDetails = await productCollection.find({})
-  res.render('productlist',{messageAlert:"this product is already entered",products:productDetails})
-}
     } catch (error) {
       console.log(error.message);
-      res.status(500).send({ success: false, msg: error.message });
+      // res.status(500).send({ success: false, msg: error.message });
     }
-  },
+}
+,
   deleteProduct: async (req, res) => {
     try {
       console.log(req.query.id);
@@ -297,13 +285,18 @@ if(!existingProduct){
 orderDetails: async (req, res) => {
   try {
     const orderid = req.query.id;
+   
     const orderDetails = await orderCollection
       .findById({ _id: orderid })
       .populate("products.productid")
       .populate("address")
       .populate("userid")
+      // .populate('orderdetail')
       .exec();
-    res.render("orderDetails", { orderDetail: orderDetails });
+      
+      // const paymentStatus = orderDetails.paymentStatus;
+     
+    res.render("orderDetails", {orderDetail:orderDetails});
   } catch (error) {
     res.render("error", { error: error.message });
   }
@@ -327,11 +320,12 @@ orderDetails: async (req, res) => {
     try {
       const orderid = req.body.orderid;
       const status = req.body.status;
+      // console.log("statussssssssss"+status);
       const order = await orderCollection.findOne({ _id: orderid });
       
       let order_update;
-      console.log( order.paymentMethod);
-      if (status == "Delivered" && order.paymentMethod == "Cash on Delivery") {
+      // console.log( order.paymentMethod);
+      if (status == "Delivered" && order.paymentMethod == "COD") {
         order_update = await orderCollection.findByIdAndUpdate(
           { _id: orderid },
           { $set: { status: status, paymentStatus: "Paid" } }
@@ -415,7 +409,26 @@ editCouponPage: async (req, res) => {
   }
 },
 
+Sales:async(req,res)=>{
+  try {
+    // const order= await orderCollection.find({paymentStatus:"paid"})
+    // .populate("products.productid")
+    //   .populate("address")
+    //   .populate("userid")
+    //   // .populate('orderdetail')
+    //   .exec();
+    const order_details = await orderCollection.find({})
+            .populate("userid")
+            .populate("products.productid")
+            .exec();
 
+      // console.log("this is fullmdata......."   +  order_details );
+    res.render('sales',{orders:order_details})
+    
+  } catch (error) {
+    console.log(error.message);
+  }
+}
 
 }
 

@@ -1,21 +1,14 @@
 require('dotenv').config();
 const express=require('express')
 const app=express()
-const port= process.env.PORT||3005
-const mongoose = require('mongoose')
+const port= process.env.PORT
+const {mongodbConnect} = require ("./config/mongodbAtlasConnection")
 
-mongoose.connect(process.env.dbconnect)
-.then(()=>{
-    console.log("mongodb connected...");
-}).catch(()=>{
-    console.log("Failed to connect");
-})
-
-
-
-
+mongodbConnect(); //mogodb connection
 const userRoute=require('./routes/userRoutes')
 const adminRoute=require('./routes/adminRoutes')
+
+
 
 app.use('/',userRoute)
 app.use('/admin',adminRoute)

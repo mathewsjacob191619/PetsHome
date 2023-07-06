@@ -19,27 +19,45 @@ const order = {
             const userId = req.session.user_id
             const { addressId, paymentMethod } = req.body;
            
-            console.log('order')
+            // console.log('order')
+
             
             const cartItems = await cartCollection.findOne({ userid: userId }).populate('products.productid');
             let totalAmount = 0;
             cartItems.products.forEach((item) => {
                 totalAmount += item.productid.productprice * item.quantity;
+
             });
             // console.log(totalAmount)
             // console.log(cartItems.products)
+           if(paymentMethod ==='COD'){
             const order = new orderCollection({
-                userid: userId,
-                products: cartItems.products,
-                totalAmount: totalAmount,
-                paymentMethod: paymentMethod,
-                status: 'Pending',
-                address: addressId,
+              userid: userId,
+              products: cartItems.products,
+              totalAmount: totalAmount,
+              paymentMethod: paymentMethod,
+              status: 'Pending',
+              address: addressId,
+          });
+          await order.save();
+            res.json({ message: 'Order placed successfully' });
+
+           }else{
+            const order = new orderCollection({
+              userid: userId,
+              products: cartItems.products,
+              totalAmount: totalAmount,
+              paymentMethod: paymentMethod,
+              status: 'Pending',
+              address: addressId,
+              paymentStatus:'paid'
             });
-            console.log(order)
             await order.save();
             res.json({ message: 'Order placed successfully' });
 
+           }
+            // console.log(order)
+            
 
         } catch (error) {
             console.log(error.message);
@@ -54,9 +72,9 @@ const order = {
         try {
           const user = req.session.user_id;
           let amount = parseInt(req.body.amount) * 100;
-          console.log(amount);
+          // console.log("heklooooooooo"+amount);
           let flag = await checkStock(user);
-          console.log(amount);
+          // console.log(amount);
           if (flag == 0) {
             const options = {
               amount: amount,
@@ -65,7 +83,7 @@ const order = {
             };
             razorpayInstance.orders.create(options, (err, order) => {
               if (!err) {
-                console.log("test");
+                // console.log("test");
                 res.status(200).send({
                   success: true,
                   msg: "Order Created",
@@ -98,13 +116,13 @@ const order = {
       try {
         let orderid = req.body.id;
         
-        console.log(orderid);
+        // console.log(orderid);
         let order = await orderCollection.findByIdAndUpdate(
           orderid,
           { status: "Return Requested" },
           { new: true }
         );
-        console.log("order"+order);
+        // console.log("order"+order);
         if (order) {
           res.send({ message: "1" });
         } else {
@@ -120,7 +138,7 @@ const order = {
         let order = await orderCollection.findById(orderid);
         
         const userwallet = await walletCollection.findOne({ userid: order.userid });
-        console.log(userwallet);
+        // console.log(userwallet);
         if (userwallet) {
           await walletCollection.findByIdAndUpdate(
             userwallet._id,
@@ -164,7 +182,7 @@ const order = {
           { paymentStatus: "Refund" },
           { new: true }
         );
-        console.log("refund succes");
+        // console.log("refund succes");
         order = await orderCollection.findByIdAndUpdate(
           orderid,
           { status: "Returned" },
@@ -237,7 +255,7 @@ let checkStock = async (user) => {
       break;
     }
   }
-  console.log(flag);
+  // console.log(flag);
  return flag;
 };
 

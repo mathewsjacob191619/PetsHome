@@ -429,10 +429,10 @@ const userControl = {
     productView:async(req,res)=>{
        try {
         const productId=req.query.id;
-        console.log(productId);
+        // console.log(productId);
         
         const userId=req.session.user_id
-        console.log(userId);
+        // console.log(userId);
         const product=await productCollection.findOne({_id:req.query.id})
         // console.log(product);
         let success = req.flash("success");
@@ -463,7 +463,23 @@ const userControl = {
         } catch (error) {
             console.log(error.message);
         }
-    }
+    },
+
+    sales: async(req,res)=>{
+        try {
+            const order_details = await orderModel.find({})
+            .populate("userid")
+            .populate("products.productid")
+            .exec();
+            res.render("work", { orders: order_details });
+          } catch (error) {
+            console.log(error.message)
+          //   res.render('error', { error: error.message })
+          }
+},
+
+
+
 }
 
 

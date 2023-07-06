@@ -69,6 +69,10 @@ admin_route.get('/addCoupon',adminController.addCouponPage)
 admin_route.post('/addCoupon',adminController.addCoupon)
 admin_route.get('/editcouponpage',adminController.editCouponPage)
 admin_route.post('/returnapprove',orderController.approveReturn)
+
+admin_route.get('/sales',adminController.Sales)
+
+
 module.exports=admin_route
 
 

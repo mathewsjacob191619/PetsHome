@@ -169,7 +169,7 @@
                                             <dl class="dlist">
                                                 <dt class="text-muted">Status:</dt>
                                                 <dd>
-                                                    <%if(orderDetail.paymentStatus == "Paid") {%>
+                                                    <%if(orderDetail.paymentStatus == "paid") {%>
                                                         <span class="badge rounded-pill alert-success text-success">Payment done</span>
                                                     <%} else if(orderDetail.paymentStatus == "Refund") {%>
                                                         <span class="badge rounded-pill alert-success text-success">Refunded to Wallet</span>
@@ -195,7 +195,7 @@
                         <h6  class="mb-15">Payment status</h6>
                         <% if (orderDetail.paymentStatus == "Refund") { %>
                             <span class="badge rounded-pill alert-success">Refund</span> 
-                        <% } else if (orderDetail.paymentStatus == "Paid") { %>
+                        <% } else if (orderDetail.paymentStatus == "paid") { %>
                             <span class="badge badge-pill badge-soft-success">Paid</span>
                         <%} else { %>
                             <span class="badge badge-pill badge-soft-danger">Unpaid</span>
