@@ -49,7 +49,11 @@
                       <!-- <a href="/admin/deletecoupon?id=" type="submit" class="btn btn-sm font-sm btn-light rounded">
                           <i class="material-icons md-delete_forever"></i> Delete
                       </a> -->
-                      <button id="coupondeletebtn-<%= coupon._id %>"   data-couponid="<%= coupon._id %>" class="coupondeletebtn btn btn-sm font-sm btn-light rounded ">Delete</button>
+                      
+                      <a href="/admin/coupondeletebtn?id=<%= coupon._id %>" type="submit" class="coupondeletebtn btn btn-sm font-sm btn-light rounded">
+                        <i class=""></i> Delete
+                      </a>
+                      <!-- <button id="coupondeletebtn-<%= coupon._id %>"   data-couponid="<%= coupon._id %>" class="coupondeletebtn btn btn-sm font-sm btn-light rounded ">Delete</button> -->
                   </div>
                 </td>
               </tr>

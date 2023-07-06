@@ -8,6 +8,7 @@ const couponModel = require('../model/couponModel');
 
 
 
+
 function toTitleCaseAndTrimmedStr(str) {
   const trimmedStr = str.replace(/\s+/g, ' ');
   return trimmedStr.replace(/\b\w+/g, function(word) {
@@ -28,7 +29,26 @@ const admin = {
     try {
       const admin = req.session.admin_name;
       // console.log(admin);
-      res.render("home",{ adminName: admin });
+      const order_details = await orderCollection.find({})
+      const productCount = await productCollection.countDocuments({});
+      const categoriesCount= await categoriesModel.countDocuments({})
+
+      // .populate("userid")
+      // .populate("products.productid")
+      // .exec();
+      let total = 0;
+      let orders=0
+
+      order_details.forEach((order) => {
+        if(order.status=="Delivered"){
+          total += order.totalAmount;
+          orders++
+        }
+  
+});
+
+
+      res.render("dashboard",{ adminName: admin,Revenue:total,ordersCount:orders,productCount:productCount,categoriesCount:categoriesCount});
     } catch (error) {
       console.log(error.message);
     }
@@ -43,7 +63,7 @@ const admin = {
         if (hashedPassword) {
           req.session.admin_name = adminData
           console.log(req.session.admin_name);
-          res.redirect('/admin/adminHome')
+          res.redirect('/admin/adminDashBoard')
         } else {
           req.flash("title", "Incorrect Pasword");
           res.redirect('/admin')
@@ -425,6 +445,15 @@ Sales:async(req,res)=>{
       // console.log("this is fullmdata......."   +  order_details );
     res.render('sales',{orders:order_details})
     
+  } catch (error) {
+    console.log(error.message);
+  }
+},
+deleteCoupon:async(req,res)=>{
+  try {
+    const couponId=req.query.id
+    await couponModel.findByIdAndDelete(couponId)
+    res.redirect('/admin/couponList')
   } catch (error) {
     console.log(error.message);
   }

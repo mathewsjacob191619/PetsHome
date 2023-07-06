@@ -3,7 +3,7 @@ const adminAuthenticate={
     isLogout:(req,res,next)=>{
         try{
         if(req.session.admin_name){
-            res.status(200).redirect('/admin/adminHome')
+            res.status(200).redirect('/admin/adminDashBoard')
         }else{
             next()
         }

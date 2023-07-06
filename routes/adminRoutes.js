@@ -43,7 +43,7 @@ admin_route.use(express.urlencoded({ extended: true }));
 admin_route.get('/',adminAuth.isLogout,adminController.adminLogin)
 
 admin_route.post('/home',adminAuth.isLogout,adminController.adminVerify)
-admin_route.get("/adminHome",adminAuth.isLogin, adminController.adminHome);
+admin_route.get('/adminDashBoard',adminAuth.isLogin, adminController.adminHome);
 admin_route.get('/productList',adminAuth.isLogin,adminController.productList)
 admin_route.get('/userList',adminAuth.isLogin,adminController.userList)
 admin_route.patch('/userAction',adminAuth.isLogin,adminController.userActions)
@@ -68,6 +68,7 @@ admin_route.get('/couponList',adminController.listCoupon)
 admin_route.get('/addCoupon',adminController.addCouponPage)
 admin_route.post('/addCoupon',adminController.addCoupon)
 admin_route.get('/editcouponpage',adminController.editCouponPage)
+admin_route.get('/coupondeletebtn',adminController.deleteCoupon)
 admin_route.post('/returnapprove',orderController.approveReturn)
 
 admin_route.get('/sales',adminController.Sales)
