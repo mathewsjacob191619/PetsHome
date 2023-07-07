@@ -72,6 +72,9 @@ admin_route.get('/coupondeletebtn',adminController.deleteCoupon)
 admin_route.post('/returnapprove',orderController.approveReturn)
 
 admin_route.get('/sales',adminController.Sales)
+admin_route.get('/chartData',adminController.fetchChartData)
+admin_route.get('/chartData2',adminController.chartData2)
+
 
 
 module.exports=admin_route

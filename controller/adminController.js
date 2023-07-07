@@ -457,8 +457,73 @@ deleteCoupon:async(req,res)=>{
   } catch (error) {
     console.log(error.message);
   }
+},
+fetchChartData:async(req,res)=>{
+  try {
+      const salesData = await orderCollection.aggregate([
+          { $match: { status: 'Delivered' } },  { $group: { _id: { $dateToString: { format: '%Y-%m-%d',date: { $toDate: '$orderDate' } }},totalRevenue: { $sum: '$totalAmount' } }},
+          {$sort: { _id: -1 }},{$project: { _id: 0, date: '$_id',totalRevenue: 1}},{$limit: 7}]);
+  
+          // const productData = await orderdb.aggregate([
+          // { $match: { status: 'Delivered' } },  { $group: { _id: { $dateToString: { format: '%Y-%m-%d',date: { $toDate: '$purchased' } }},totalRevenue: { $sum: '$grandtotal' } }},
+          // {$sort: { _id: -1 }},{$project: { _id: 0, date: '$_id',totalRevenue: 1}},{$limit: 4}]);
+  
+      //   console.log(salesData);
+  
+        const data = [];
+        const date = [];
+      for (const totalRevenue of salesData) {
+          data.push(totalRevenue.totalRevenue);
+        }
+      
+          for (const item of salesData) {
+          date.push(item.date);
+        }
+        data.reverse()
+        date.reverse();
+        
+
+      res.status(200).send({ data:data, date:date })
+
+  } catch (error) {
+      res.status(404).render('error',{error:error.message}) 
 }
 
+},
+chartData2: async (req, res) => {
+  try {
+    const salesData = await orderCollection.aggregate([
+      { $match: { status: 'Delivered' } },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: '%Y-%m', date: { $toDate: '$orderDate' } }
+          },
+          totalRevenue: { $sum: '$totalAmount' }
+        }
+      },
+      { $sort: { _id: -1 } },
+      { $project: { _id: 0, date: '$_id', totalRevenue: 1 } },
+      { $limit: 7 }
+    ]);
+
+    const data = [];
+    const date = [];
+
+
+    for (const totalRevenue of salesData) {
+      data.push(totalRevenue.totalRevenue);
+      const monthName = new Date(totalRevenue.date + '-01').toLocaleString('en-US', { month: 'long' });
+      date.push(monthName);
+    }
+    data.reverse();
+    date.reverse();
+    res.status(200).json({ data: data, date: date });
+
+  } catch (error) {
+      res.status(404).render('error',{error:error.message}) 
+  }
+      },
 }
 
 module.exports = admin

@@ -1,40 +1,27 @@
-(function ($) {
-    "use strict";
+axios.get('/admin/chartData')
+.then((response) => {
+   
 
-    /*Sale statistics Chart*/
+//******************************************************chart 1 Sale Statistics****************************************************
     if ($('#myChart').length) {
         var ctx = document.getElementById('myChart').getContext('2d');
         var chart = new Chart(ctx, {
-            // The type of chart we want to create
+          
             type: 'line',
             
-            // The data for our dataset
+           
             data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                labels: response.data.date,
                 datasets: [{
                         label: 'Sales',
                         tension: 0.3,
                         fill: true,
                         backgroundColor: 'rgba(44, 120, 220, 0.2)',
                         borderColor: 'rgba(44, 120, 220)',
-                        data: [18, 17, 4, 3, 2, 20, 25, 31, 25, 22, 20, 9]
+                        data: response.data.data
                     },
-                    {
-                        label: 'Visitors',
-                        tension: 0.3,
-                        fill: true,
-                        backgroundColor: 'rgba(4, 209, 130, 0.2)',
-                        borderColor: 'rgb(4, 209, 130)',
-                        data: [40, 20, 17, 9, 23, 35, 39, 30, 34, 25, 27, 17]
-                    },
-                    {
-                        label: 'Products',
-                        tension: 0.3,
-                        fill: true,
-                        backgroundColor: 'rgba(380, 200, 230, 0.2)',
-                        borderColor: 'rgb(380, 200, 230)',
-                        data: [30, 10, 27, 19, 33, 15, 19, 20, 24, 15, 37, 6]
-                    }
+                   
+                    
 
                 ]
             },
@@ -50,55 +37,103 @@
         });
     } //End if
 
-    /*Sale statistics Chart*/
-    if ($('#myChart2').length) {
+})
+.catch(error => {
+  console.error(error);
+});
+
+
+
+
+
+
+//****************************************************Chart 2 Revenue Based On Monthly Sales************************************************
+    axios.get('/admin/chartData2')
+    .then((response) => {
+      const data = response.data.data;
+      const date = response.data.date;
+  
+      if ($('#myChart2').length) {
         var ctx = document.getElementById("myChart2");
         var myChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-            labels: ["900", "1200", "1400", "1600"],
+          type: 'bar',
+          data: {
+            labels: date,
             datasets: [
-                {
-                    label: "US",
-                    backgroundColor: "#5897fb",
-                    barThickness:10,
-                    data: [233,321,783,900]
-                }, 
-                {
-                    label: "Europe",
-                    backgroundColor: "#7bcf86",
-                    barThickness:10,
-                    data: [408,547,675,734]
-                },
-                {
-                    label: "Asian",
-                    backgroundColor: "#ff9076",
-                    barThickness:10,
-                    data: [208,447,575,634]
-                },
-                {
-                    label: "Africa",
-                    backgroundColor: "#d595e5",
-                    barThickness:10,
-                    data: [123,345,122,302]
-                },
+              {
+                label: "Sales",
+                backgroundColor: "#5897fb",
+                barThickness: 10,
+                data: data
+              }
             ]
-            },
-            options: {
-                plugins: {
-                    legend: {
-                        labels: {
-                        usePointStyle: true,
-                        },
-                    }
+          },
+          options: {
+            plugins: {
+              legend: {
+                labels: {
+                  usePointStyle: true,
                 },
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true
+              }
             }
+          }
         });
-    } //end if
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
     
-})(jQuery);
+
+
+
+
+//**********************************************Chart 3 Category wise Sales**********************************************************************
+
+    const colors = ['#5897fb', '#7bcf86', '#ff9076','#8a2be2','#8a2be2'];
+    axios.get('/admin/chartData3')
+    .then((response) => {
+      const data = response.data.data;
+      const date = response.data.date;
+      const category = response.data.categoryname;
+    
+      if ($('#myChart3').length) {
+        var ctx = document.getElementById("myChart3");
+        var myChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: date,
+            datasets: category.map((cat, index) => {
+              return {
+                label: cat,
+                backgroundColor:colors[index % colors.length],
+                barThickness: 10,
+                data: data[cat]
+              };
+            })
+          },
+          options: {
+            plugins: {
+              legend: {
+                labels: {
+                  usePointStyle: true,
+                },
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true
+              }
+            }
+          }
+        });
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
