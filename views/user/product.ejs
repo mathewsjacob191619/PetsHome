@@ -6,17 +6,17 @@
       
       <div class="products">
 
-        
         <div class="row">
           
           <% productdetails.forEach((product) => { %>
           <div class="col-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2 ">
             <div class="product">
-              <figure class="product-media">
+              <figure class="product-media product-image-container">
                 <%if(product.productquantity == 0) {%>
                   <span class="product-label label-out">Out of Stock</span>
               <%}%>
-                <a href="/productView?id=<%=product._id%>">
+             
+                <a href="/productView?id=<%=product._id%>" >
                   <img src="uploads/<%= product.productimages[0] %>" alt="Product image" class="product-image">
                 </a>
                 <div class="product-action-vertical">

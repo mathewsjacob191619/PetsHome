@@ -76,6 +76,7 @@ user_route.get('/addresses',addressController.load)
 // user_route.get("/editProfile", userController.editProfile);
 user_route.get('/editProfile', userController.editPage);
 user_route.get("/changePassword",userController.passworpage);
+user_route.post('/changePassword',userController.passwordChange)
 
 
 user_route.get('/addToCart',cartController.add);

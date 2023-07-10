@@ -51,6 +51,8 @@
                         <div class="card-header">
                             <h4>Media</h4>
                         </div>
+
+                        
                         <div class="card-body">
                             <div class="input-upload"> 
                                 <!-- <img src="asset/imgs/theme/upload.svg" alt=""> -->
@@ -63,37 +65,24 @@
                                      <% } %>
                             </div>
                         </div>
-<!-- 
+
+                          
+                     
+
                         <div class="card-body">
                             <div class="input-upload">
-                                >
-                        
                                 <% for(let i=0; i<productData.productimages.length; i++) { %>
                                     <div class="image-container">
+                                        <div class="image-options"></div>
                                         <img src="uploads/<%= productData.productimages[i] %>" alt="Product Image">
-                                        <button class="edit-button" data-image-index="<%= i %>">Edit</button>
-                                    </div>
-                                <% } %>
-                            </div>
-                        </div> -->
-
-
-
-<!-- 
-                        <div class="card-body">
-                            <div class="input-upload">
-                        
-                                <% for(let i=0; i<productData.productimages.length; i++) { %>
-                                    <div class="image-container">
-                                        <img src="uploads/<%= productData.productimages[i] %>" alt="Product Image">
-                                        <div class="image-options">
+                                        
                                             <button class="delete-button" data-image-index="<%= i %>">Delete</button>
                                         </div>
                                     </div>
                                 <% } %>
                             </div>
                         </div>
-                         -->
+                       
                         
                     </div> <!-- card end// -->
                     <div class="card mb-4">

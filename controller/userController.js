@@ -477,7 +477,23 @@ const userControl = {
           //   res.render('error', { error: error.message })
           }
 },
-
+passwordChange: async (req, res) => {
+    try {
+      const userId = req.session.user_id;
+      const newPassword = req.body.password;
+  
+      // Generate a new hashed password
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+  
+      // Update the user's password field
+      await collection.findByIdAndUpdate({ _id: userId }, { password: hashedPassword });
+  
+      res.redirect('/');
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+  
 
 
 }
