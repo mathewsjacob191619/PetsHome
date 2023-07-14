@@ -75,24 +75,22 @@ const order = {
               wallet:walletAmount
 
             })
-            const orderdetails =await order.save();
-            res.json({ message: 'Order placed successfully' });     
-            const orderid = await orderCollection.findOne({ _id: orderdetails });
-            await walletCollection.findByIdAndUpdate({_id:id},{$inc:{balance: -totalAmount}},{$push:{orderDetails:{orderid:orderid,amount:totalAmount,type:"Added"}}},{ new: true })
-            // await walletCollection.findByIdAndUpdate(
-            //   userwallet._id,
-            //   {
-            //     $inc: { balance: price },
-            //     $push: {
-            //       orderDetails: {
-            //         orderid: orderid,
-            //         amount: price,
-            //         type: "Added",
-            //       },
-            //     },
-            //   },
-            //   { new: true }
-            // );
+            const orderDetails = {
+              orderid: order._id,
+              amount: totalAmount,
+              type: 'Less'
+            };
+
+            const updatedWallet = await walletCollection.findOneAndUpdate(
+              { userid: userId },
+              {
+                $inc: { balance: -totalAmount },
+                $push: { orderDetails: orderDetails }
+              },
+              { new: true }
+            );
+            
+            res.json({ message: 'Order placed successfully' });
            }
            else{
             const order = new orderCollection({
