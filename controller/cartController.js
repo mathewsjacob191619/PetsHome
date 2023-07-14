@@ -2,6 +2,7 @@ const cartCollection = require("../model/cartModel");
 const productCollection = require("../model/productModel");
 const addressModel = require("../model/addressModel");
 const couponCollection = require('../model/couponModel')
+const walletCollection=require('../model/walletModel')
 
 
 const cart = {
@@ -26,23 +27,26 @@ const cart = {
       let flag = 0;
       const productId = req.query.id
       const userData = req.session.user_id
+      
+      // const wallet=walletCollection.find({userid:userData._id})
+    
+        // const TotalWallet=wallet.balance
+        //  console.log("waletttttttttt"+TotalWallet);
       if (userData) {
         const productDetail = await productCollection.findOne({ _id: productId })
+        const productPrice=productDetail.productprice
 
-        // console.log("pro id"+productId);
-        // console.log("user data"+userData);
-        // console.log("pro details"+productDetail);
         if (productDetail.productquantity > 0) {
-          // console.log("p quant"+productDetail.productquantity);
           const cart = await cartCollection.findOne({ userid: userData });
           if (cart) {
             const proExist = cart.products.findIndex((product) =>
               product.productid.equals(productId)
             );
+            
             if (proExist == -1) {
               await cartCollection.findOneAndUpdate(
                 { userid: userData },
-                { $push: { products: { productid: productId, quantity: 1 } } },
+                { $push: { products: { productid: productId,productPrice:productPrice, quantity: 1} } },
                 { new: true }
               );
             } else {
@@ -54,7 +58,7 @@ const cart = {
           } else {
             const cart = new cartCollection({
               userid: userData,
-              products: [{ productid: productId, quantity: 1 }],
+              products: [{ productid: productId, quantity: 1,productPrice:productPrice}],
             });
             await cart.save();
           }
@@ -148,6 +152,7 @@ const cart = {
   },
   checkout: async (req, res) => {
     try {
+
       const userData = req.session.user_id;
       const address = await addressModel.find({ userid: userData });
       const coupon = await couponCollection.find({});
@@ -155,13 +160,30 @@ const cart = {
         .findOne({ userid: userData })
         .populate("products.productid");
 
+        const walletData=await walletCollection
+        .findOne({userid: userData})
+        .populate("orderDetails.orderid")
+        // console.log("wallettttttttttttttttttttttttttttttttttt"+walletData);
+
+        const totalWallet=walletData.balance
       if (cartData) {
+        if(walletData){
         res.render("checkout", {
           addresses: address,
           title: userData,
           products: cartData,
-          coupons: coupon
+          coupons: coupon,
+          walletAmount:totalWallet
         });
+      }else{
+        res.render("checkout", {
+          addresses: address,
+          title: userData,
+          products: cartData,
+          coupons: coupon,
+          walletAmount:0
+        });
+      }
       } else {
         res.redirect("/cart");
       }

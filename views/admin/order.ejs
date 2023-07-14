@@ -42,20 +42,22 @@
                                 <th scope="col">Name</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Total</th>
-                                <th scope="col">Status</th>
+                                <!-- <th scope="col">Status</th> -->
                                 <th scope="col">Date</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
                         <%orders.reverse().forEach((order)=>{%>
+
                             <% console.log(orders); %>
                         <tbody>
+                            
                             <tr>
                                 <td><%- order._id.toString().slice(-4) %></td>
                                 <td><b><%=order.userid.name%></b></td>
                                 <td><%=order.userid.email%></td>
                                 <td>₹<%=order.totalAmount%>.00</td>
-                                <% if (order.status == "Delivered" || order.status == "Completed") { %>
+                                <!-- <% if (order.status == "Delivered" || order.status == "Completed") { %>
                                     <td><span class="badge rounded-pill alert-success"><%=order.status%></span></td>
                                 <% } else if (order.status == "Pending") { %>
                                     <td><span class="badge rounded-pill alert-warning"><%=order.status%></span></td>
@@ -63,7 +65,7 @@
                                     <td><span class="badge rounded-pill alert-danger"><%=order.status%></span></td>
                                 <%} else { %>
                                     <td><span class="badge rounded-pill alert-primary"><%=order.status%></span></td>
-                                <%}%>
+                                <%}%> -->
                                 <td><%=new Date(order.orderDate).toLocaleDateString()%></td>
                                 <td>
                                     <a href="/admin/orderdetails?id=<%=order._id%>" class="btn btn-md rounded font-sm">Detail</a>

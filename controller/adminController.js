@@ -297,6 +297,8 @@ const admin = {
     try {
       const orders = await orderCollection.find({}).populate("userid").exec();
       res.render("order",{orders: orders });
+
+
     } catch (error) {
       console.log(error.message);
     }
@@ -305,6 +307,7 @@ const admin = {
 orderDetails: async (req, res) => {
   try {
     const orderid = req.query.id;
+    const productid=req.query.proid;
    
     const orderDetails = await orderCollection
       .findById({ _id: orderid })
@@ -321,6 +324,13 @@ orderDetails: async (req, res) => {
     res.render("error", { error: error.message });
   }
 },
+// individualOrderDetails:async(req,res)=>{
+//   try {
+    
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// }
 // updateStatus:async(req,res)=>{
 //   try {
 //      const orderid = req.query.id;
@@ -336,59 +346,51 @@ orderDetails: async (req, res) => {
 //     }
 //   },
 
-  updateStatus: async (req, res) => {
-    try {
-      const orderid = req.body.orderid;
-      const status = req.body.status;
-      // console.log("statussssssssss"+status);
-      const order = await orderCollection.findOne({ _id: orderid });
-      
-      let order_update;
-      // console.log( order.paymentMethod);
-      if (status == "Delivered" && order.paymentMethod == "COD") {
-        order_update = await orderCollection.findByIdAndUpdate(
-          { _id: orderid },
-          { $set: { status: status, paymentStatus: "Paid" } }
-        );
-      } else {
-        order_update = await orderCollection.findByIdAndUpdate(
-          { _id: orderid },
-          { $set: { status: status } }
-        );
-      }
+updateStatus: async (req, res) => {
+  try {
+    const { orderId, status, productId } = req.body;
 
-      if (status == "Delivered") {
-        const deliveredDate = new Date();
-        await orderCollection.findByIdAndUpdate(
-          orderid,
-          { deliveredDate: deliveredDate },
-          { new: true }
-        );
-        // const completionTime = moment(deliveredDate).add(1, "minute");
-      //   const completionTime = moment(deliveredDate).add(7, "days");
-      //   setTimeout(async () => {
-      //     const updatedOrder = await orderCollection.findById(orderid);
-      //     if (
-      //       updatedOrder &&
-      //       updatedOrder.status !== "Completed" &&
-      //       updatedOrder.status !== "Return Requested" &&
-      //       updatedOrder.status !== "Returned"
-      //     ) {
-      //       updatedOrder.status = "Completed";
-      //       await updatedOrder.save();
-      //     }
-      //   }, completionTime.diff(moment()));
-      }
+    const order = await orderCollection.findOne({ _id: orderId });
+    console.log(order);
+    const product = order.products.find((p) => p._id.toString() === productId);
+    if (product) {
+      product.status = status;
+    }
 
-      if (order_update) {
-        res.send({ message: "1" });
-      } else {
-        res.send({ message: "0" });
-      }
+    await order.save();
+
+    let order_update;
+    if (product.status == "Delivered" && order.paymentMethod == "COD") {
+      order_update = await orderCollection.findByIdAndUpdate(
+        { _id: orderId },
+        { $set: { paymentStatus: "Paid" } }
+      );
+    } else {
+      // order_update = await orderCollection.findByIdAndUpdate(
+      //   { _id: orderId },
+      //   { $set: { status: status } }
+      // );
+    }
+
+    if (product.status == "Delivered") {
+      const deliveredDate = new Date();
+      await orderCollection.findByIdAndUpdate(
+        orderId,
+        { deliveredDate: deliveredDate },
+        { new: true }
+      );
+    }
+
+    if (order_update) {
+      res.send({ success: "true" });
+    } else {
+      res.send({ success: "false" });
+    }
   } catch (error) {
     console.log(error.message);
   }
-},
+}
+,
 
 listCoupon: async (req, res) => {
   try {

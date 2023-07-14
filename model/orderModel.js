@@ -21,6 +21,14 @@ const orderSchema = mongoose.Schema(
         status: {
           type: String,
           default: "Pending",
+        },
+        paymentStatus: {
+          type: String,
+          default: "Unpaid",
+        },
+        productPrice:{
+          type: Number,
+          required: true,
         }
       },
     ],
@@ -32,10 +40,10 @@ const orderSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    status: {
-      type: String,
-      default: "Pending",
-    },
+    // status: {
+    //   type: String,
+    //   default: "Pending",
+    // },
     address: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "address",
@@ -49,6 +57,10 @@ const orderSchema = mongoose.Schema(
       type: String,
       default: "Unpaid",
     },
+    wallet:{
+      type: Number,
+      default: 0
+    }
   },
   { versionKey: false }
 );

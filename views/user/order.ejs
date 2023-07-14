@@ -69,7 +69,7 @@
                                                     <div class="product">
                                                         <figure class="product-media">
                                                             <a href="/productView?id=<%=product.productid%>">
-                                                                
+                                                                                                                                
                                                                 <% if (product.productid.productimages ) { %>
                                                                     <img src="uploads/<%=product.productid.productimages[0] %>" class="product-image" alt="It" width="50px" />
                                                                 <% } else { %>
@@ -85,34 +85,34 @@
                                                 <td class="price-col">₹<%=product.productid.productprice %>.00</td>
                                                 <td class="stock-col"><%=new Date(order.orderDate).toLocaleDateString()%></td>
                                                 <td class="price-col">
-                                                    <% if (order.status == "Delivered" || order.status == "Completed") { %>
+                                                    <% if (product.status == "Delivered" || product.status == "Completed") { %>
                                                         <span class="badge rounded-pill bg-success">Delivered</span>
-                                                    <% } else if (order.status == "Pending") { %>
-                                                        <span class="badge rounded-pill bg-warning"><%=order.status%></span>
-                                                    <% } else if (order.status == "Return Requested" || order.status == "Cancelled" || order.status == "Returned") { %>
-                                                        <span class="badge rounded-pill bg-danger"><%=order.status%></span>
+                                                    <% } else if (product.status == "Pending") { %>
+                                                        <span class="badge rounded-pill bg-warning"><%=product.status%></span>
+                                                    <% } else if (product.status == "Return Requested" || product.status == "Cancelled" || product.status == "Returned") { %>
+                                                        <span class="badge rounded-pill bg-danger"><%=product.status%></span>
                                                     <%} else { %>
-                                                        <span class="badge rounded-pill bg-info"><%=order.status%></span>
+                                                        <span class="badge rounded-pill bg-info"><%=product.status%></span>
                                                     <%}%>
 
                                                        
                                                 </td> 
                                                 
                                                 <td class="action-col">
-                                                    <% if(order.status == "Delivered"){ %>
-                                                        <a href="#" id="returnorder" data-id="<%=order._id%>"><button class="btn btn-outline-warning return">RETURN</button></a>
-                                                    <% } else if(order.status == "Completed") { %>
+                                                    <% if(product.status == "Delivered"){ %>
+                                                        <a href="#" id="returnorder" data-id="<%=order._id%>" && data-proid="<%=product._id %>"><button class="btn btn-outline-warning return">RETURN</button></a>
+                                                    <% } else if(product.status == "Completed") { %>
                                                         <button class="btn btn-info return" disabled>ORDER COMPLETED</button>
-                                                    <% } else if (order.status == "Cancelled") { %>
+                                                    <% } else if (product.status == "Cancelled") { %>
                                                         <button class="btn btn-info return" disabled>CANCELLED</button>
-                                                    <% } else if (order.status == "Return Requested") { %>
+                                                    <% } else if (product.status == "Return Requested") { %>
                                                         <button class="btn btn-warning return" disabled>WAITING</button>
-                                                    <% } else if (order.status == "Shipped") { %>
+                                                    <% } else if (product.status == "Shipped") { %>
                                                         <button class="btn btn-info return" disabled>CANCEL</button>
-                                                    <% } else if (order.status == "Returned") { %>
+                                                    <% } else if (product.status == "Returned") { %>
                                                         <button class="btn btn-info return" disabled>RETURNED</button>
                                                     <% }  else { %>
-                                                        <a href="#" id="cancelorder" data-id="<%=order._id%>"><button class="btn btn-outline-danger cancel">CANCEL</button></a>
+                                                        <a href="#" id="cancelorder" data-id="<%=order._id%>" && data-proid="<%=product._id %>"><button class="btn btn-outline-danger cancel">CANCEL</button></a>
                                                     <% } %>
                                                 </td>
 
@@ -144,8 +144,10 @@
         $("#cancelorder").click(function (){
             console.log('clicked');
             var orderid = $(this).data("id");
+            var proid = $(this).data("proid");
             var data = {
                 id: orderid,
+                proid:proid
             };
             Swal.fire({
                 title: "Are you sure?",
@@ -192,8 +194,11 @@
         $("#returnorder").click(function (){
             console.log('clicked');
             var orderid = $(this).data("id");
+            var productid=$(this).data("proid")
             var data = {
                 id: orderid,
+                proid:productid
+                
             };
             console.log(data);
             Swal.fire({

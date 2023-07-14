@@ -30,6 +30,8 @@ const walletSchema=mongoose.Schema({
           type: {
             type: String,
             required: true,
+            // default:"Added"
+            
           },
         },
       ],

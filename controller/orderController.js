@@ -17,17 +17,34 @@ const order = {
     place: async (req, res) => {
         try {
             const userId = req.session.user_id
-            const { addressId, paymentMethod } = req.body;
+            // console.log("userrrrrrrrrrrrrrrrrrrrr"+userId);
+            const { addressId, paymentMethod,walletAmount } = req.body;
+            // const walletId= await walletCollection.findById({userid:userId})
+            // console.log("1111111111111111111111"+walletId);
+            // console.log("22222222222222"+walletId._id);
            
             // console.log('order')
+            const walletData=await walletCollection
+            .findOne({userid:userId})
+            .populate("orderDetails.orderid")
+            const id=walletData._id
+            
+            
 
             
             const cartItems = await cartCollection.findOne({ userid: userId }).populate('products.productid');
             let totalAmount = 0;
+            let productPrice=0
             cartItems.products.forEach((item) => {
+              // item.productid.forEach((product)=>{
+
+              // })
                 totalAmount += item.productid.productprice * item.quantity;
+                productPrice= item.productid.productprice
+                
 
             });
+            // const productPrice=product.productid.productprice
             // console.log(totalAmount)
             // console.log(cartItems.products)
            if(paymentMethod ==='COD'){
@@ -38,11 +55,46 @@ const order = {
               paymentMethod: paymentMethod,
               status: 'Pending',
               address: addressId,
+              productPrice:productPrice
+              
           });
           await order.save();
             res.json({ message: 'Order placed successfully' });
 
-           }else{
+           }
+          else if(paymentMethod==='wallet'){
+            const order= new orderCollection({
+              
+              userid: userId,
+              products: cartItems.products,
+              totalAmount: totalAmount,
+              paymentMethod: paymentMethod,
+              status: 'Pending',
+              address: addressId,
+              paymentStatus:'paid',
+              wallet:walletAmount
+
+            })
+            const orderdetails =await order.save();
+            res.json({ message: 'Order placed successfully' });     
+            const orderid = await orderCollection.findOne({ _id: orderdetails });
+            await walletCollection.findByIdAndUpdate({_id:id},{$inc:{balance: -totalAmount}},{$push:{orderDetails:{orderid:orderid,amount:totalAmount,type:"Added"}}},{ new: true })
+            // await walletCollection.findByIdAndUpdate(
+            //   userwallet._id,
+            //   {
+            //     $inc: { balance: price },
+            //     $push: {
+            //       orderDetails: {
+            //         orderid: orderid,
+            //         amount: price,
+            //         type: "Added",
+            //       },
+            //     },
+            //   },
+            //   { new: true }
+            // );
+           }
+           else{
             const order = new orderCollection({
               userid: userId,
               products: cartItems.products,
@@ -50,7 +102,8 @@ const order = {
               paymentMethod: paymentMethod,
               status: 'Pending',
               address: addressId,
-              paymentStatus:'paid'
+              paymentStatus:'paid',
+              // productPrice:productPrice
             });
             await order.save();
             res.json({ message: 'Order placed successfully' });
@@ -115,13 +168,25 @@ const order = {
     returnRequest: async (req, res) => {
       try {
         let orderid = req.body.id;
-        
-        // console.log(orderid);
-        let order = await orderCollection.findByIdAndUpdate(
-          orderid,
-          { status: "Return Requested" },
-          { new: true }
-        );
+        let productid=req.body.proid
+        // let proid=req.body.proid;
+        // console.log("orderidddddddddd"+orderid);
+        // console.log("productiddddddd"+productid);
+
+        let order = await orderCollection.findById(orderid)
+        const product=order.products.find((p) => p._id.toString() === productid);
+        if (product) {
+          product.status ="Return Requested"
+        }
+        await order.save();
+        // console.log("orderrrrrrrrrr"+order);
+
+        // console.log("proidddddddddddd"+productid)
+        // let order = await orderCollection.findByIdAndUpdate(
+        //   orderid,
+        //   { status: "Return Requested" },
+        //   { new: true }
+        // );
         // console.log("order"+order);
         if (order) {
           res.send({ message: "1" });
@@ -135,19 +200,28 @@ const order = {
     approveReturn: async (req, res) => {
       try {
         let orderid = req.body.id;
-        let order = await orderCollection.findById(orderid);
+        let productid=req.body.proid;
+        const userId = req.session.user_id
+        // const orderItems = await orderCollection.findOne({ userid: userId }).populate('products.productid');
         
+        // console.log("productidddddddddddddddddddddd"+productid);
+
+
+        let order = await orderCollection.findById(orderid);
+        const products=order.products.find((p) => p._id.toString() === productid);
+        const price=products.productPrice
         const userwallet = await walletCollection.findOne({ userid: order.userid });
+        
         // console.log(userwallet);
         if (userwallet) {
           await walletCollection.findByIdAndUpdate(
             userwallet._id,
             {
-              $inc: { balance: order.totalAmount },
+              $inc: { balance: price },
               $push: {
                 orderDetails: {
                   orderid: orderid,
-                  amount: order.totalAmount,
+                  amount: price,
                   type: "Added",
                 },
               },
@@ -157,11 +231,11 @@ const order = {
         } else {
           let wallet = new walletCollection({
             userid: order.userid,
-            balance: order.totalAmount,
+            balance: price,
             orderDetails: [
               {
                 orderid: orderid,
-                amount: order.totalAmount,
+                amount: price,
                 type: "Added",
               },
             ],
@@ -183,11 +257,11 @@ const order = {
           { new: true }
         );
         // console.log("refund succes");
-        order = await orderCollection.findByIdAndUpdate(
-          orderid,
-          { status: "Returned" },
-          { new: true }
-        );
+          const product=order.products.find((p) => p._id.toString() === productid);
+        if (product) {
+          product.status ="Returned"
+        }
+        await order.save();
         if (order) {
           res.send({ message: "1" });
         } else {
@@ -200,6 +274,7 @@ const order = {
     cancelRequest:async(req,res)=>{
       try {
         let orderid=req.body.id
+        let proid=req.body.proid
       let order=await orderCollection.findById(orderid);
       if(order.paymentMethod !="COD"){
        const userWallet=await walletCollection.findOne({userid:order.userid})
@@ -217,11 +292,17 @@ for(const product of order.products){
 const order =await orderCollection.findByIdAndUpdate(orderid,{ paymentStatus: "Refund"},{new:true})
 
       }
-      order = await orderModel.findByIdAndUpdate(
-        orderid,
-        { status: "Cancelled" },
-        { new: true }
-      );
+      const product=order.products.find((p) => p._id.toString() === proid);
+      if (product) {
+        product.status ="Cancelled"
+      }
+      await order.save();
+      // order = await orderModel.findByIdAndUpdate(
+      //   orderid,
+      //   { status: "Cancelled" },
+      //   { new: true }
+      // );
+      order=await orderModel
       if (order) {
         res.send({ message: "1" });
       } else {

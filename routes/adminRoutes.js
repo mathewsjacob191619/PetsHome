@@ -62,6 +62,7 @@ admin_route.get('/logout',adminAuth.isLogin,adminController.adminLogout)
 // order
 admin_route.get('/order',adminController.order)
 admin_route.get('/orderdetails',adminController.orderDetails)
+// admin_route.get('/individualorderdetails',adminController.individualOrderDetails)
 admin_route.post('/statusupdate',adminController.updateStatus)
 
 admin_route.get('/couponList',adminController.listCoupon)
