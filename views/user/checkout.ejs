@@ -140,11 +140,11 @@
                                             <td>Subtotal:</td>
                                             <td id="subtotal"></td>
                                         </tr><!-- End .summary-subtotal -->
-                                        <tr class="summary-subtotal">
+                                        <tr class="summary-subtotal"style="display: none;">
                                             <td>wallet:</td>
                                             <!-- <td id="walletAmount"></td> -->
-                                            <td id="walletAmount">0.0</td>
-                                        </tr><!-- End .summary-subtotal -->
+                                            <td id="walletAmount" ><%- walletAmount %></td>
+                                        </tr>
 
                                         <tr>
                                             <td>Coupon Discount:</td>
@@ -422,21 +422,36 @@
                     //     }
                     // }
                      else {
-                        saveOrder();
+                   
+                    saveOrder();
+                
+                        
                     }
                 }
                 function saveOrder() {
+
+
                     $.ajax({
                         url: '/placeOrder',
                         method: 'POST',
-                        data: { addressId, paymentMethod,walletAmount },
+                        data: { addressId, paymentMethod,walletAmount,purchase },
                         // data: { addressId, paymentMethod },
-
-
                         success: function (response) {
                             // Handle the success response (e.g., show a success message, redirect to profile page)
+                            if(response.message=='low wallet'){
+                                Swal.fire({
+                                title: 'sorry',
+                                text: 'Insufficient wallet balance. Please choose another payment method.',
+                                icon: 'error',
+                                confirmButtonText: 'OK',
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    location.reload();
+                                }
+                            });
+                            }else{
                             Swal.fire({
-                                title: 'Success',
+                                title: 'success',
                                 text: response.message,
                                 icon: 'success',
                                 confirmButtonText: 'OK',
@@ -445,6 +460,7 @@
                                     window.location.href = '/orders';
                                 }
                             });
+                        }
                         },
                         error: function (error) {
                             // Handle the error response (e.g., show an error message)
@@ -456,6 +472,7 @@
                             });
                         }
                     });
+                
                 }
             });
         </script>

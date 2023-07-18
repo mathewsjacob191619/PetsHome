@@ -376,11 +376,13 @@ const userControl = {
     orders: async (req, res) => {
         try {
             let userId = req.session.user_id
+            console.log("userid"+userId);
             const order = await orderModel
                 .find({ userid: userId })
                 .populate("products.productid")
                 .exec();
 
+        
                 
             res.render("order", {
                 title: userId,

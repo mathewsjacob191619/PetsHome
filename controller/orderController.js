@@ -18,7 +18,8 @@ const order = {
         try {
             const userId = req.session.user_id
             // console.log("userrrrrrrrrrrrrrrrrrrrr"+userId);
-            const { addressId, paymentMethod,walletAmount } = req.body;
+            const { addressId, paymentMethod,walletAmount,purchase } = req.body;
+            const purchaseTotal=purchase
             // const walletId= await walletCollection.findById({userid:userId})
             // console.log("1111111111111111111111"+walletId);
             // console.log("22222222222222"+walletId._id);
@@ -63,34 +64,43 @@ const order = {
 
            }
           else if(paymentMethod==='wallet'){
-            const order= new orderCollection({
+
+            if (walletAmount >= purchase) {
+              const order= new orderCollection({
               
-              userid: userId,
-              products: cartItems.products,
-              totalAmount: totalAmount,
-              paymentMethod: paymentMethod,
-              status: 'Pending',
-              address: addressId,
-              paymentStatus:'paid',
-              wallet:walletAmount
-
-            })
-            const orderDetails = {
-              orderid: order._id,
-              amount: totalAmount,
-              type: 'Less'
-            };
-
-            const updatedWallet = await walletCollection.findOneAndUpdate(
-              { userid: userId },
-              {
-                $inc: { balance: -totalAmount },
-                $push: { orderDetails: orderDetails }
-              },
-              { new: true }
-            );
+                userid: userId,
+                products: cartItems.products,
+                totalAmount: totalAmount,
+                paymentMethod: paymentMethod,
+                status: 'Pending',
+                address: addressId,
+                paymentStatus:'paid',
+                wallet:walletAmount
+  
+              })
+              const orderDetails = {
+                orderid: order._id,
+                amount: totalAmount,
+                type: 'Less'
+              };
+  
+              const updatedWallet = await walletCollection.findOneAndUpdate(
+                { userid: userId },
+                {
+                  $inc: { balance: -totalAmount },
+                  $push: { orderDetails: orderDetails }
+                },
+                { new: true }
+              );
+              
+              res.json({ message: 'Order placed successfully' });
             
-            res.json({ message: 'Order placed successfully' });
+            } else {
+              res.json({ message: 'low wallet' });
+             
+            }
+             
+           
            }
            else{
             const order = new orderCollection({
@@ -339,7 +349,7 @@ let checkStock = async (user) => {
 };
 
 
-module.exports = order;
+// module.exports = order;
 
 
 

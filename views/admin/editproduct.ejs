@@ -55,20 +55,29 @@
                         
                         <div class="card-body">
                             <div class="input-upload"> 
-                                <!-- <img src="asset/imgs/theme/upload.svg" alt=""> -->
                                 <input  class="form-control" type="file" name="files" multiple>
-
+                                <!-- <img src="asset/imgs/theme/upload.svg" alt=""> -->
+                                
                                 <% for(let i=0; i<productData.productimages.length; i++) { %>
                                     <div class="image-container">
                                         <img src="uploads/<%= productData.productimages[i] %>" alt="Product Image">
+                                        <button class="delete-button" data-image-index="<%= i %>" data-imageid=<%=productData.productimages[i]%>>Delete</button>
                                     </div> 
                                      <% } %>
                             </div>
                         </div>
 
                           
-                     
 
+
+
+
+
+
+
+                        
+                     
+<!-- 
                         <div class="card-body">
                             <div class="input-upload">
                                 <% for(let i=0; i<productData.productimages.length; i++) { %>
@@ -81,7 +90,7 @@
                                     </div>
                                 <% } %>
                             </div>
-                        </div>
+                        </div> -->
                        
                         
                     </div> <!-- card end// -->
@@ -135,7 +144,7 @@
 <%- include('../partials/admin/footer') -%>
 
 
-<script>$(document).ready(function() {
+<!-- <script>$(document).ready(function() {
     $('.delete-button').on('click', function() {
       var imageIndex = $(this).data('image-index');
       // Perform the deletion action using the imageIndex, e.g., sending an AJAX request to delete the image from the server
@@ -143,5 +152,27 @@
       $(this).closest('.image-container').remove();
     });
   });
-  </script>
+  </script> -->
+  <script>
+    $(document).ready(function(){
+        $('.delete-button').on('click', function(){
+            console.log("clicked");
+            var imageID = $(this).data('imageid')
+            console.log(imageID);
+            data={ imageID }
+            //with incrementing the quatity number ajax call
+            $.ajax({
+                url:'/admin/deleteimage',
+                method:"post",
+                data:data,
+                success: function(response){
+                    console.log(response);
+                    if(response.message == "1"){
+                        location.reload()
+                    }
+                }
+            })
+        });
+    });
+</script>
 

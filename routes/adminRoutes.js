@@ -9,6 +9,7 @@ const adminAuth= require('../authentication/adminAuthentication')
 
 const orderController=require('../controller/orderController')
 const adminController = require("../controller/adminController");
+const offerController=require('../controller/offerController')
 // const adminAuthenticate = require("../authentication/adminAuthentication");
 
 const storage = multer.diskStorage({
@@ -53,7 +54,8 @@ admin_route.get('/addproduct',adminAuth.isLogin,adminController.addProduct)
 admin_route.patch('/categoryStatus',adminAuth.isLogin,adminController.changeCategoryStatus)
 admin_route.delete('/categorydeletion',adminAuth.isLogin,adminController.categoryDeletion)
 admin_route.post('/productpublish',adminAuth.isLogin,uploads.array("files"),adminController.productPublish)
-admin_route.get("/editProduct",adminAuth.isLogin, adminController.editProduct);
+admin_route.get("/editProduct",adminAuth.isLogin,uploads.array("files"),adminController.editProduct);
+admin_route.post("/deleteimage", adminAuth.isLogin, adminController.deleteimage);
 admin_route.post('/updateproduct',adminAuth.isLogin,uploads.array("files"),adminController.updateProduct)
 admin_route.delete("/deleteProduct",adminAuth.isLogin, adminController.deleteProduct);
 admin_route.get('/logout',adminAuth.isLogin,adminController.adminLogout)
@@ -75,6 +77,9 @@ admin_route.post('/returnapprove',orderController.approveReturn)
 admin_route.get('/sales',adminController.Sales)
 admin_route.get('/chartData',adminController.fetchChartData)
 admin_route.get('/chartData2',adminController.chartData2)
+
+admin_route.get('/productOffer',offerController.productOffer)
+admin_route.post('/productOffer',offerController.addProductOffer)
 
 
 

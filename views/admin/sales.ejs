@@ -51,15 +51,15 @@
                   </tr>
                 </thead>
                 <tbody id="order-table-body">
-                  <% orders.forEach(function(order){ %>
+                  <% orders.reverse().forEach(function(order){ %>
                   <% order.products.forEach(function(product) { %>
-                  <% if (order.status === "Delivered") { %>
+                  <% if (product.status === "Delivered") { %>
                   <tr>
-                    <td><%= order._id.toString().substr(-5) %></td>
+                    <td><%= product._id.toString().substr(-5) %></td>
                     <td><b><%= order.userid.name %></b></td>
                     <td><%= product.productid.productname %></td>
                     <td><%= new Date(order.orderDate).toLocaleDateString() %></td>
-                    <td><%= order.status %></td>
+                    <td><%= product.status %></td>
                     <td><%= order.totalAmount %></td>
                   </tr>
                   <% } %>

@@ -39,11 +39,13 @@ const admin = {
       let total = 0;
       let orders=0
 
-      order_details.forEach((order) => {
+      order_details.forEach((product) => {
+        product.products.forEach((order)=>{
         if(order.status=="Delivered"){
-          total += order.totalAmount;
+          total += order.productPrice;
           orders++
         }
+      })
   
 });
 
@@ -183,12 +185,7 @@ const admin = {
           arrImages.push(req.files[i].filename);
         }
       }
-      // function toTitleCase(str) {
-      //   return str.replace(/\b\w+/g, function(word) {
-      //     return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-      //   });
-      // }
-
+     
       const product= toTitleCaseAndTrimmedStr(req.body.productname)
       const productcheck= await productModel.findOne({productname:product})
       if(!productcheck){
@@ -220,6 +217,24 @@ const admin = {
       console.log(error.message);
     }
   },
+
+  deleteimage: async (req, res) => {
+    const { imageID } = req.body;
+    try {
+      const prodetails = await productCollection.findOne({
+        productimages: imageID,
+      });
+      await productCollection.updateOne(
+        { _id: prodetails._id },
+        { $pull: { productimages: imageID } }
+      );
+      res.send({ message: "1" });
+    } catch (error) {
+      console.log(error.message);
+      // res.status(404).render("error", { error: error.message });
+    }
+  },
+
   updateProduct: async (req, res) => {
     try {
       const product = toTitleCaseAndTrimmedStr(req.body.productname);
@@ -245,8 +260,10 @@ const admin = {
             productquantity: req.body.productquantity,
             productprice: req.body.productprice,
             productdescription: req.body.productdescription,
-            productimages: arrImages,
+            productimages: [],
           };
+          dataobj.productimages.push(...existingProduct.productimages);
+          dataobj.productimages.push(...arrImages);
         } else {
           // For if the admin is not updating the image
           dataobj = {
@@ -462,8 +479,10 @@ deleteCoupon:async(req,res)=>{
 },
 fetchChartData:async(req,res)=>{
   try {
+    const order=await orderCollection.find({})
+
       const salesData = await orderCollection.aggregate([
-          { $match: { status: 'Delivered' } },  { $group: { _id: { $dateToString: { format: '%Y-%m-%d',date: { $toDate: '$orderDate' } }},totalRevenue: { $sum: '$totalAmount' } }},
+        { $match: { 'products.status': 'Delivered' } },{ $group: { _id: { $dateToString: { format: '%Y-%m-%d',date: { $toDate: '$orderDate' } }},totalRevenue: { $sum: '$totalAmount' } }},
           {$sort: { _id: -1 }},{$project: { _id: 0, date: '$_id',totalRevenue: 1}},{$limit: 7}]);
   
           // const productData = await orderdb.aggregate([

@@ -1,0 +1,92 @@
+
+<%- include('../partials/admin/header') -%>
+
+
+
+<section class="content-main">
+    <div class="content-header">
+        <div>
+            <h2 class="content-title card-title">Product Offers</h2>
+            <p></p>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-3">
+                    <form action="/admin/productOffer" method="POST">
+                        <div class="mb-4">
+                            <label for="category_name" class="form-label">Product Name</label>
+                            <select name="productname" class="form-select">
+                            <% products.forEach((product)=> {%>
+                                    <option> <%= product.productname %> </option>
+
+                                  <% }) %>
+                               
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label">Offer Percentage</label>
+                            <select name="offerpercentage" class="form-select">
+                                <option>10</option>
+                                <option>20</option>
+                                <option>30</option>
+                                <option>40</option>
+                                <option>50</option>
+                            </select>
+                        </div>
+                        <!-- <div class="mb-4">
+                            <label class="form-label">Expiry</label>
+                            <input placeholder="" type="date" name="expireDate" class="form-control">
+                        </div> -->
+                        <div class="d-grid">
+                            <button class="btn btn-primary">Create Offer</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-9">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">
+                                        <!-- <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" />
+                                        </div> -->
+                                    </th>
+                                    <th>Name</th>
+                                    <th>Offer Percentage</th>
+                                    <th>Actual Price</th>
+                                    <th>Offer Price</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                           
+                            <tbody>
+                                <tr>
+                                    <td class="text-center">
+                                        <!-- <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="" />
+                                        </div> -->
+                                    </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <a href="#"   class="btn btn-danger removeoffer">Remove</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            
+                        </table>
+                    </div>
+                </div> <!-- .col// -->
+            </div> <!-- .row // -->
+        </div> <!-- card body .// -->
+    </div> <!-- card .// -->
+</section> <!-- content-main end// -->
+
+<%- include('../partials/admin/footer') -%>
+
+

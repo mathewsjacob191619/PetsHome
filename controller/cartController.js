@@ -232,7 +232,9 @@ const cart = {
           res.send({ msg: "2", message: "Coupon already used" });
         }
       } else {
-        res.send({ msg: "2", message: "Coupon Code Invalid" });
+        // res.send({ msg: "2", message: "Coupon Code Invalid" });
+        res.send({ msg: "2", message: "Coupon already used" });
+
       }
     } catch (error) {
       res.render("error", { error: error.message });

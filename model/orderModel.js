@@ -40,10 +40,7 @@ const orderSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    // status: {
-    //   type: String,
-    //   default: "Pending",
-    // },
+   
     address: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "address",

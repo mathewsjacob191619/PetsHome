@@ -100,7 +100,7 @@
                                                 
                                                 <td class="action-col">
                                                     <% if(product.status == "Delivered"){ %>
-                                                        <a href="#" id="returnorder" data-id="<%=order._id%>" && data-proid="<%=product._id %>"><button class="btn btn-outline-warning return">RETURN</button></a>
+                                                        <a href="#" class="returnorder" data-id="<%=order._id%>" && data-proid="<%=product._id %>"><button class="btn btn-outline-warning return">RETURN</button></a>
                                                     <% } else if(product.status == "Completed") { %>
                                                         <button class="btn btn-info return" disabled>ORDER COMPLETED</button>
                                                     <% } else if (product.status == "Cancelled") { %>
@@ -191,7 +191,7 @@
     });
 
     $(document).ready(function(){
-        $("#returnorder").click(function (){
+        $(".returnorder").click(function (){
             console.log('clicked');
             var orderid = $(this).data("id");
             var productid=$(this).data("proid")
