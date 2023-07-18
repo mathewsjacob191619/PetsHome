@@ -61,7 +61,7 @@
                                     <th>Action</th>
                                 </tr>
                             </thead>
-                           
+                            <%  offered.forEach((product)=> {%>
                             <tbody>
                                 <tr>
                                     <td class="text-center">
@@ -69,15 +69,16 @@
                                             <input class="form-check-input" type="checkbox" value="" />
                                         </div> -->
                                     </td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td><%- product.productname %></td>
+                                    <td><%- product.offerpercentage %></td>
+                                    <td><%- product.productprice %></td>
+                                    <td><%- product.offerprice %></td>
                                     <td>
                                         <a href="#"   class="btn btn-danger removeoffer">Remove</a>
                                     </td>
                                 </tr>
                             </tbody>
+                            <% }) %>
                             
                         </table>
                     </div>
@@ -88,5 +89,8 @@
 </section> <!-- content-main end// -->
 
 <%- include('../partials/admin/footer') -%>
+
+
+
 
 
