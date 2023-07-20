@@ -11,7 +11,7 @@ const offer={
             const offered = await productCollection.find({ offerprice: { $ne: 0 } });
             res.render('addProductOffer',{ products, offered,successmsg,messageAlert,})
         } catch (error) {
-            console.log(error.message);
+          res.render("error", { error: error.message });
         }
     },
     addProductOffer: async (req, res) => {
@@ -31,7 +31,7 @@ const offer={
         res.redirect("/admin/productOffer");
           }
         } catch (error) {
-          console.log(error.message);
+          res.render("error", { error: error.message });
         }
       },
       removeProductOffer:async(req,res)=>{
@@ -48,10 +48,6 @@ const offer={
         }
         
       }
-     
-
-
-
 }
 
 module.exports=offer

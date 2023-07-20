@@ -19,7 +19,7 @@ const cart = {
         res.redirect('/loginpage')
       }
     } catch (error) {
-      console.log(error.message);
+      res.render("error", { error: error.message });
     }
   },
   add: async (req, res) => {
@@ -28,10 +28,6 @@ const cart = {
       const productId = req.query.id
       const userData = req.session.user_id
       
-      // const wallet=walletCollection.find({userid:userData._id})
-    
-        // const TotalWallet=wallet.balance
-        //  console.log("waletttttttttt"+TotalWallet);
       if (userData) {
         const productDetail = await productCollection.findOne({ _id: productId })
         let productPrice;
@@ -59,7 +55,6 @@ const cart = {
             } else {
               flag = 1;
               req.flash("title", "Product Already in cart");
-              // res.redirect(req.get("referer"));
               res.redirect('/cart');
             }
           } else {
@@ -69,10 +64,7 @@ const cart = {
             });
             await cart.save();
           }
-          // await productCollection.updateOne(
-          //   { _id: proId },
-          //   { $inc: { selected: 1 } }
-          // );
+          
           if (flag == 0) {
             req.flash("success", "Product Added to Cart");
             res.redirect("/cart");
@@ -170,7 +162,6 @@ const cart = {
         const walletData=await walletCollection
         .findOne({userid: userData})
         .populate("orderDetails.orderid")
-        console.log("walletDataaaaa"+walletData);
 
        
       if (cartData) {
@@ -196,7 +187,7 @@ const cart = {
       }
     } catch (error) {
       //   res.render("error", { error: error.message });
-      console.log(error.message);
+      res.render("error", { error: error.message });
     }
   },
   editAddress: async (req, res) => {
@@ -216,7 +207,7 @@ const cart = {
       req.flash("success", "Address updated Successfully.");
       res.redirect("/addresses");
     } catch (error) {
-      console.log(error.message);
+      res.render("error", { error: error.message });
     }
   },
   validateCoupon: async (req, res) => {

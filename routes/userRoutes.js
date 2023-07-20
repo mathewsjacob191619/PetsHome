@@ -17,6 +17,10 @@ const orderController= require('../controller/orderController')
 
 const wishlistController=require('../controller/wishlistController')
 
+const userAuth= require('../authentication/userAuthentication')
+
+
+
 
 
 
@@ -98,8 +102,8 @@ user_route.post('/returnorder',orderController.returnRequest)
 user_route.post('/cancelorder',orderController.cancelRequest)
 user_route.get('/wallet',userController.wallet)
 user_route.get('/sales',userController.sales)
-user_route.get('/addToWishlist',wishlistController.addWishList)
-user_route.get('/wishlist',wishlistController.wishListLoad)
+user_route.get('/addToWishlist', wishlistController.addWishList)
+user_route.get('/wishlist',userAuth.isLogin,wishlistController.wishListLoad)
 
 user_route.get('/deleteProwishlist',wishlistController.wishListDelete)
 
