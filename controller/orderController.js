@@ -37,9 +37,7 @@ const order = {
                 
 
             });
-            // const productPrice=product.productid.productprice
-            // console.log(totalAmount)
-            // console.log(cartItems.products)
+        
            if(paymentMethod ==='COD'){
             const order = new orderCollection({
               userid: userId,
@@ -48,7 +46,7 @@ const order = {
               paymentMethod: paymentMethod,
               status: 'Pending',
               address: addressId,
-              // productPrice:productPrice
+
               
           });
           await order.save();
@@ -111,13 +109,13 @@ const order = {
             res.json({ message: 'Order placed successfully' });
 
            }
-            // console.log(order)
+
             
 
         } catch (error) {
-            console.log(error.message);
-            console.error(error);
-            // Send an error response to the client
+          
+           
+
             res.status(500).json({ message: 'Something went wrong. Please try again later.' });
 
         }
@@ -127,9 +125,9 @@ const order = {
         try {
           const user = req.session.user_id;
           let amount = parseInt(req.body.amount) * 100;
-          // console.log("heklooooooooo"+amount);
+       
           let flag = await checkStock(user);
-          // console.log(amount);
+     
           if (flag == 0) {
             const options = {
               amount: amount,
@@ -138,7 +136,7 @@ const order = {
             };
             razorpayInstance.orders.create(options, (err, order) => {
               if (!err) {
-                // console.log("test");
+            
                 res.status(200).send({
                   success: true,
                   msg: "Order Created",
@@ -163,7 +161,7 @@ const order = {
             res.status(200).send({ message: false, msg: "Some products are out of Stock" });
           }
         } catch (error) {
-          console.log(error.message);
+  
         }
     },
 
@@ -171,9 +169,7 @@ const order = {
       try {
         let orderid = req.body.id;
         let productid=req.body.proid
-        // let proid=req.body.proid;
-        // console.log("orderidddddddddd"+orderid);
-        // console.log("productiddddddd"+productid);
+ 
 
         let order = await orderCollection.findById(orderid)
         const product=order.products.find((p) => p._id.toString() === productid);
@@ -181,15 +177,7 @@ const order = {
           product.status ="Return Requested"
         }
         await order.save();
-        // console.log("orderrrrrrrrrr"+order);
-
-        // console.log("proidddddddddddd"+productid)
-        // let order = await orderCollection.findByIdAndUpdate(
-        //   orderid,
-        //   { status: "Return Requested" },
-        //   { new: true }
-        // );
-        // console.log("order"+order);
+     
         if (order) {
           res.send({ message: "1" });
         } else {
@@ -204,9 +192,6 @@ const order = {
         let orderid = req.body.id;
         let productid=req.body.proid;
         const userId = req.session.user_id
-        // const orderItems = await orderCollection.findOne({ userid: userId }).populate('products.productid');
-        
-        // console.log("productidddddddddddddddddddddd"+productid);
 
 
         let order = await orderCollection.findById(orderid);
@@ -214,7 +199,7 @@ const order = {
         const price=products.productPrice
         const userwallet = await walletCollection.findOne({ userid: order.userid });
         
-        // console.log(userwallet);
+
         if (userwallet) {
           await walletCollection.findByIdAndUpdate(
             userwallet._id,
@@ -258,7 +243,7 @@ const order = {
           { paymentStatus: "Refund" },
           { new: true }
         );
-        // console.log("refund succes");
+        
           const product=order.products.find((p) => p._id.toString() === productid);
         if (product) {
           product.status ="Returned"
@@ -299,11 +284,7 @@ const order =await orderCollection.findByIdAndUpdate(orderid,{ paymentStatus: "R
         product.status ="Cancelled"
       }
       await order.save();
-      // order = await orderModel.findByIdAndUpdate(
-      //   orderid,
-      //   { status: "Cancelled" },
-      //   { new: true }
-      // );
+    
       order=await orderModel
       if (order) {
         res.send({ message: "1" });
@@ -311,7 +292,7 @@ const order =await orderCollection.findByIdAndUpdate(orderid,{ paymentStatus: "R
         res.send({ message: "0" });
       }
       } catch (error) {
-        console.log(error.message);
+  
       }
     },
 
@@ -325,44 +306,22 @@ module.exports = order;
 
 
 let checkStock = async (user) => {
-  // console.log("checking stock");
+
   let flag = 0;
   const Cart = await cartCollection
     .findOne({ userid: user })
     .populate("products.productid");
   for (const products of Cart.products) {
     const pro = await productCollection.findOne({ _id: products.productid });
-    // console.log("pro" +pro);
+
     if (products.quantity > pro.quantity) {
       flag = 1;
       break;
     }
   }
-  // console.log(flag);
+
  return flag;
 };
 
 
-// module.exports = order;
-
-
-
-// let checkStock= async (userId)=>{
-// let flag =0;
-// const cart=await cartCollection.findOne({userid:userId})
-// .populate("products.productid");
-// product.forEach(cart.products){
-// const pro=productCollection.findOne({_id:product.productid})
-// }
-// }
-
-
-// let checkStock= async (userId)=>{
-//     // Assuming you have retrieved the cart items using the code you provided
-// const cartItems = await cartCollection.findOne({ userid: userId }).populate('products.productid');
-// // Extracting cart item IDs
-// const cartItemIds = cartItems.products.map(item => item.productid._id);
-// // Printing the cart item IDs
-// console.log('Cart Item IDs:', cartItemIds);
-// }
 
