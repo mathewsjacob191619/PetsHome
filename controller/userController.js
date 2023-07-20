@@ -30,7 +30,7 @@ const userControl = {
             
            
         } catch (error) {
-            console.log(error.message);
+            res.render("error", { error: error.message });
         }
     },
 
@@ -65,33 +65,7 @@ const userControl = {
         }
     },
 
-    // userLogin: async (req, res) => {
-    //     try {
-    //         const userdata = await collection.findOne({ email: req.body.email })
-    //         if (userdata) {
-    //             if (userdata.isVerified) {
-    //                 if (!userdata.isBlocked) {
-    //                     if (userdata.password === req.body.password) {
-    //                         req.session.user_id = userdata.name
-    //                         res.render('main', { title: req.session.user_id })
-    //                         // res.redirect('/userhome')
-    //                     } else {
-    //                         res.render("login", { messageAlert: "Incorrect Password" });
-    //                     }
-    //                 } else {
-    //                     res.render("login", { messageAlert: "Account Blocked" });
-    //                 }
-    //             } else {
-    //                 res.render("login", { messageAlert: "Verify Your Email" });
-    //             }
-    //         }
-    //         else {
-    //             res.render("login", { messageAlert: "Incorrect Username" });
-    //         }
-    //     } catch (error) {
-    //         res.send(error.message)
-    //     }
-    // },
+    
     userLogin: async (req, res) => {
         try {
             const userdata = await collection.findOne({ email: req.body.email });
@@ -233,15 +207,7 @@ const userControl = {
             console.log(error.message);
         }
     },
-    // products: async (req, res) => {
-    //     try {
-    //         const product = await productCollection.find();
-    //         // console.log(products);
-    //         res.render('product', { productdetails: product, title: req.session.user_id })
-    //     } catch (error) {
-    //         console.log(error.message);
-    //     }
-    // },
+    
     products: async (req, res) => {
         try {
             const { category, brand } = req.query;
@@ -259,7 +225,7 @@ const userControl = {
             // console.log(products);
             res.render('product', { productdetails: product, title: req.session.user_id })
         } catch (error) {
-            console.log(error.message);
+            res.render("error", { error: error.message });
         }
     },    
     forgotPassword: (req, res) => {

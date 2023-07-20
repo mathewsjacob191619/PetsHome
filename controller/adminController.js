@@ -22,8 +22,8 @@ const admin = {
       const title = req.flash("title");
       res.render("login", { messageAlert: title[0] || "" });
     } catch (error) {
-      console.log(error.message);
-    }
+      res.render("error", { error: error.message });
+      }
   },
   adminHome: async (req, res) => {
     try {
@@ -52,8 +52,8 @@ const admin = {
 
       res.render("dashboard",{ adminName: admin,Revenue:total,ordersCount:orders,productCount:productCount,categoriesCount:categoriesCount});
     } catch (error) {
-      console.log(error.message);
-    }
+      res.render("error", { error: error.message });
+        }
   },
   adminVerify: async (req, res) => {
     try {
@@ -76,8 +76,8 @@ const admin = {
       }
 
     } catch (error) {
-      console.log(error.message);
-    }
+      res.render("error", { error: error.message });
+        }
   },
   productList: async (req, res) => {
     try {
@@ -91,8 +91,8 @@ const admin = {
       }
 
     } catch (error) {
-      console.log(error.message);
-    }
+      res.render("error", { error: error.message });
+        }
   },
   userList: async (req, res) => {
     try {
@@ -104,32 +104,31 @@ const admin = {
       res.redirect('/admin')
     }
   }catch (error) {
-      console.log(error.message);
-    }
+    res.render("error", { error: error.message });    }
   },
   userActions: async (req, res) => {
     try {
       const resp = await adminCollection.updateOne({ _id: req.body.userId }, { $set: { isBlocked: parseInt(req.body.isValue) } })
       res.status(200).json({ message: "Updated successfully" })
     } catch (error) {
-      console.log(error.message);
-    }
+      res.render("error", { error: error.message });
+        }
   },
   categoryPage: async (req, res) => {
     try {
       const resData = await categoriesModel.find({})
       res.render('categories', { categories: resData })
     } catch (error) {
-      console.log(error.message);
-    }
+      res.render("error", { error: error.message });
+        }
   },
   addProduct: async (req, res) => {
     try {
       const categories = await categoriesModel.find({ status: true }) 
       res.render('addproduct', { categories })
     } catch (error) {
-      console.log(error.message);
-    }
+      res.render("error", { error: error.message });
+        }
   },
   
   createCategory: async (req, res) => {
@@ -154,8 +153,8 @@ const admin = {
       res.render('categories',{messageAlert:"this category is already added",categories:categoryDetails})
     }
     } catch (error) {
-      console.log(error.message);
-    }
+      res.render("error", { error: error.message });
+        }
   },
   changeCategoryStatus: async (req, res) => {
     try {
@@ -165,16 +164,16 @@ const admin = {
       // console.log(updated);
       res.status(201).json({ message: "Status updated" })
     } catch (error) {
-      console.log(error.message);
-    }
+      res.render("error", { error: error.message });
+        }
   },
   categoryDeletion: async (req, res) => {
     try {
       await categoriesModel.deleteOne({ _id: req.body.id })
       res.status(200).json({ message: 'Document deleted successfully' });
     } catch (error) {
-      console.log(error.message);
-    }
+      res.render("error", { error: error.message });
+        }
   },
   productPublish: async (req, res) => {
     try {
@@ -205,8 +204,8 @@ const admin = {
       res.render('addproduct',{messageAlert:"this product is already added",categories})
     }
     } catch (error) {
-      console.log(error.message);
-    }
+      res.render("error", { error: error.message });
+        }
   },
   editProduct: async (req, res) => {
     try {
@@ -214,8 +213,8 @@ const admin = {
       const categories = await categoriesModel.find({ categoryName: { $ne: productdata.productcategory } });
       res.render("editproduct", { productData: productdata, categories:categories });
     } catch (error) {
-      console.log(error.message);
-    }
+      res.render("error", { error: error.message });
+        }
   },
 
   deleteimage: async (req, res) => {
@@ -230,8 +229,8 @@ const admin = {
       );
       res.send({ message: "1" });
     } catch (error) {
-      console.log(error.message);
-      // res.status(404).render("error", { error: error.message });
+      res.render("error", { error: error.message });
+            // res.status(404).render("error", { error: error.message });
     }
   },
 
@@ -288,8 +287,8 @@ const admin = {
         res.render('productlist', { messageAlert: "This product already exists", products: productDetails });
       }
     } catch (error) {
-      console.log(error.message);
-      // res.status(500).send({ success: false, msg: error.message });
+      res.render("error", { error: error.message });
+            // res.status(500).send({ success: false, msg: error.message });
     }
 }
 ,
@@ -317,8 +316,7 @@ const admin = {
 
 
     } catch (error) {
-      console.log(error.message);
-    }
+      res.render("error", { error: error.message });    }
   },
  
 orderDetails: async (req, res) => {
@@ -341,27 +339,6 @@ orderDetails: async (req, res) => {
     res.render("error", { error: error.message });
   }
 },
-// individualOrderDetails:async(req,res)=>{
-//   try {
-    
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// }
-// updateStatus:async(req,res)=>{
-//   try {
-//      const orderid = req.query.id;
-//       const orderDetails = await orderCollection
-//         .findById({ _id: orderid })
-//         .populate("products.productid")
-//         .populate("address")
-//         .populate("userid")
-//         .exec();
-//       res.render("orderDetails", { orderDetail: orderDetails });
-//     } catch (error) {
-//       res.render("error", { error: error.message });
-//     }
-//   },
 
 updateStatus: async (req, res) => {
   try {
@@ -404,8 +381,7 @@ updateStatus: async (req, res) => {
       res.send({ success: "false" });
     }
   } catch (error) {
-    console.log(error.message);
-  }
+    res.render("error", { error: error.message });  }
 }
 ,
 
@@ -465,8 +441,7 @@ Sales:async(req,res)=>{
     res.render('sales',{orders:order_details})
     
   } catch (error) {
-    console.log(error.message);
-  }
+    res.render("error", { error: error.message });  }
 },
 deleteCoupon:async(req,res)=>{
   try {
@@ -474,8 +449,7 @@ deleteCoupon:async(req,res)=>{
     await couponModel.findByIdAndDelete(couponId)
     res.redirect('/admin/couponList')
   } catch (error) {
-    console.log(error.message);
-  }
+    res.render("error", { error: error.message });  }
 },
 fetchChartData:async(req,res)=>{
   try {
@@ -507,8 +481,7 @@ fetchChartData:async(req,res)=>{
       res.status(200).send({ data:data, date:date })
 
   } catch (error) {
-      res.status(404).render('error',{error:error.message}) 
-}
+    res.render("error", { error: error.message });}
 
 },
 chartData2: async (req, res) => {
@@ -542,8 +515,8 @@ chartData2: async (req, res) => {
     res.status(200).json({ data: data, date: date });
 
   } catch (error) {
-      res.status(404).render('error',{error:error.message}) 
-  }
+    res.render("error", { error: error.message });
+    }
       },
 }
 

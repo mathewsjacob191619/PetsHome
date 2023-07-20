@@ -14,7 +14,7 @@ const address={
         success: success[0],
       });
     } catch (error) {
-      console.log(error.message);
+      res.render("error", { error: error.message });
     }
   },
   editPage: async (req, res) => {
@@ -23,15 +23,15 @@ const address={
       const user = await collection.findOne({ _id: userId });
       res.render("editProfile", { title: userId, user: user });
     } catch (error) {
-console.log(error.message);    }
+      res.render("error", { error: error.message });   
+ }
   },
   addpage:async(req,res)=>{
     try {
      const userId=req.session.user_id
       res.render('addAddress',{title:userId})
     } catch (error) {
-      console.log(error.message);
-    }
+      res.render("error", { error: error.message });    }
   },
   add:async(req,res)=>{
     try {
@@ -50,8 +50,7 @@ console.log(error.message);    }
      req.flash("success", "New address added");
      res.redirect("/addresses");
     } catch (error) {
-      console.log(error.message);
-    }
+      res.render("error", { error: error.message });    }
   },
   editAddressPage:async(req,res)=>{
    try {
@@ -60,8 +59,7 @@ console.log(error.message);    }
     const address= await addressCollection.findOne({_id:addressId})
     res.render('editAddress',{title:userId,address:address})
    } catch (error) {
-    console.log("error.message");
-   }
+    res.render("error", { error: error.message });   }
   }
 
 }
