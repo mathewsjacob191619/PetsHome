@@ -17,30 +17,22 @@ const order = {
     place: async (req, res) => {
         try {
             const userId = req.session.user_id
-            // console.log("userrrrrrrrrrrrrrrrrrrrr"+userId);
             const { addressId, paymentMethod,walletAmount,purchase } = req.body;
             const purchaseTotal=purchase
-            // const walletId= await walletCollection.findById({userid:userId})
-            // console.log("1111111111111111111111"+walletId);
-            // console.log("22222222222222"+walletId._id);
-           
-            // console.log('order')
+          
             const walletData=await walletCollection
             .findOne({userid:userId})
             .populate("orderDetails.orderid")
-            const id=walletData._id
-            
-            
+            // const id=walletData._id
 
-            
             const cartItems = await cartCollection.findOne({ userid: userId }).populate('products.productid');
             let totalAmount = 0;
             let productPrice=0
             cartItems.products.forEach((item) => {
-              // item.productid.forEach((product)=>{
+              
+              
+                totalAmount += item.productPrice * item.quantity;
 
-              // })
-                totalAmount += item.productid.productprice * item.quantity;
                 productPrice= item.productid.productprice
                 
 
@@ -56,10 +48,11 @@ const order = {
               paymentMethod: paymentMethod,
               status: 'Pending',
               address: addressId,
-              productPrice:productPrice
+              // productPrice:productPrice
               
           });
           await order.save();
+          await cartCollection.deleteOne({ _id: cartItems._id });
             res.json({ message: 'Order placed successfully' });
 
            }
@@ -114,6 +107,7 @@ const order = {
               // productPrice:productPrice
             });
             await order.save();
+            await cartCollection.deleteOne({ _id: cartItems._id });
             res.json({ message: 'Order placed successfully' });
 
            }

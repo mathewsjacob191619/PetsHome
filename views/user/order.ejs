@@ -82,7 +82,7 @@
                                                 <td class="price-col" >  <h3 class="product-title" style="margin-left: 5px;">
                                                     <a href="/orderDetails?id=<%=order._id%>"><%=product.productid.productname %></a>
                                                 </h3></td>
-                                                <td class="price-col">₹<%=product.productid.productprice %>.00</td>
+                                                <td class="price-col">₹<%=product.productPrice %>.00</td>
                                                 <td class="stock-col"><%=new Date(order.orderDate).toLocaleDateString()%></td>
                                                 <td class="price-col">
                                                     <% if (product.status == "Delivered" || product.status == "Completed") { %>

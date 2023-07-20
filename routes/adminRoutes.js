@@ -80,6 +80,7 @@ admin_route.get('/chartData2',adminController.chartData2)
 
 admin_route.get('/productOffer',offerController.productOffer)
 admin_route.post('/productOffer',offerController.addProductOffer)
+admin_route.post('/removeProductOffer',offerController.removeProductOffer)
 
 
 

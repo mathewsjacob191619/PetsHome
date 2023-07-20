@@ -3,19 +3,58 @@
 <main class="main">
   <div class="page-content">
     <div class="container-fluid ">
+      <div class="row">
+        <!-- <div class="col-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2">
+          <label for="category-filter">Filter by category:</label>
+          <select id="category-filter">
+            <option value="">All Categories</option>
+            <option value="Category1">Category1</option>
+            <option value="Category2">Category2</option> -->
+            <!-- Add more categories here as needed -->
+          <!-- </select>
+        </div> -->
+        <!-- <div class="col-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2">
+          <label for="brand-filter">Filter by brand:</label>
+          <select id="brand-filter">
+            <option value="">All Brands</option>
+            <option value="Brand1">Royal Canin</option>
+            <option value="Brand2">Brand2</option> -->
+            <!-- Add more brands here as needed -->
+          <!-- </select>
+        </div> -->
+        <div class="toolbox-left">
+          <div class="toolbox-sort">
+              <label for="sortby">Sort by:</label>
+              <div class="select-custom">
+                  <select name="sortby" id="sortby" class="form-control" onchange="sortProducts()">
+                      <option selected="selected">Price</option>
+                      <option >Price Low to High</option>
+                      <option >Price High to Low</option>
+                  </select>
+              </div>
+          </div>
+      </div>
+      </div>
       
       <div class="products">
 
         <div class="row">
           
+          
           <% productdetails.forEach((product) => { %>
-          <div class="col-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2 ">
+            <%productprice= product.offerprice > 0?product.offerprice:product.productprice %>
+          <div class="product-item col-6 col-md-4 col-lg-4 col-xl-3 col-xxl-2" data-price="<%=productprice %>">
             <div class="product">
               <figure class="product-media product-image-container">
                 <%if(product.productquantity == 0) {%>
                   <span class="product-label label-out">Out of Stock</span>
-              <%}%>
-             
+              <%} else{%>
+                <%if(product.offerpercentage>0){%>
+             <span class="product-label label-sale text-endt"><%= product.offerpercentage %>% off</span>
+             <%}%>
+             <%}%>
+
+
                 <a href="/productView?id=<%=product._id%>" >
                   <img src="uploads/<%= product.productimages[0] %>" alt="Product image" class="product-image">
                 </a>
@@ -39,15 +78,24 @@
                 <h3 class="product-title">
                   <a href="/productView?id=<%=product._id%>"><%= product.productname %></a>
                 </h3><!-- End .product-title -->
-                <div class="product-price">
-                  ₹<%= product.productprice %>
-                </div><!-- End .product-price -->
-                <div class="ratings-container">
-                  <div class="ratings">
-                    <div class="ratings-val" style="width: 0%;"></div><!-- End .ratings-val -->
-                  </div><!-- End .ratings -->
-                  <span class="ratings-text">( <%= product.reviews %> Reviews )</span>
-                </div><!-- End .rating-container -->
+
+                
+                <br>
+                <%if(product.offerprice > 0) {%>
+                  <div class="product-price">
+                      ₹<%=product.offerprice%>.00&nbsp;&nbsp;
+                      <span style="color: rgb(178, 161, 161);">
+                          <s>₹<%=product.productprice%>.00</s>
+                      </span>
+                  </div><!-- End .product-price -->
+              <%} else {%>
+                  <div class="product-price">
+                      ₹<%=product.productprice%>.00
+                  </div><!-- End .product-price -->
+              <%}%>
+                <br>
+
+
               </div><!-- End .product-body -->
             </div><!-- End .product -->
           </div><!-- End .col-sm-6 col-lg-4 col-xl-3 -->
@@ -61,3 +109,59 @@
   </div><!-- End .page-content -->
 </main><!-- End .main -->
  <%-include('../partials/footer')-%>
+ 
+
+ <script>
+  function sortProducts() {
+const sortSelect = document.getElementById('sortby');
+const sortValue = sortSelect.value;
+const productItems = document.querySelectorAll('.product-item');
+
+const sortedItems = Array.from(productItems).sort((a, b) => {
+  const priceA = parseFloat(a.dataset.price);
+  const priceB = parseFloat(b.dataset.price);
+
+  if (sortValue === 'Price Low to High') {
+    return priceA - priceB;
+  } else if (sortValue === 'Price High to Low') {
+    return priceB - priceA;
+  } else {
+    return 0;
+  }
+});
+
+const parentContainer = productItems[0].parentNode;
+
+sortedItems.forEach(item => {
+  parentContainer.appendChild(item);
+});
+}
+
+</script>
+
+
+ <script>
+  // Function to filter products by category and brand
+  function filterProducts() {
+    const selectedCategory = document.getElementById("category-filter").value;
+    const selectedBrand = document.getElementById("brand-filter").value;
+    const products = document.getElementsByClassName("product");
+
+    for (let i = 0; i < products.length; i++) {
+      const productCategory = products[i].querySelector(".product-category").innerText;
+      const productBrand = products[i].querySelector(".product-brand").innerText;
+      const showCategory = selectedCategory === "" || productCategory === selectedCategory;
+      const showBrand = selectedBrand === "" || productBrand === selectedBrand;
+
+      if (showCategory && showBrand) {
+        products[i].style.display = "block";
+      } else {
+        products[i].style.display = "none";
+      }
+    }
+  }
+
+  // Listen for changes in the category and brand filter dropdowns
+  document.getElementById("category-filter").addEventListener("change", filterProducts);
+  document.getElementById("brand-filter").addEventListener("change", filterProducts);
+</script>

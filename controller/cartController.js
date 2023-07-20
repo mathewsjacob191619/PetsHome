@@ -34,7 +34,14 @@ const cart = {
         //  console.log("waletttttttttt"+TotalWallet);
       if (userData) {
         const productDetail = await productCollection.findOne({ _id: productId })
-        const productPrice=productDetail.productprice
+        let productPrice;
+        if(productDetail.offerprice > 0){
+           productPrice=productDetail.offerprice
+
+        }else{
+           productPrice=productDetail.productprice
+        }
+        
 
         if (productDetail.productquantity > 0) {
           const cart = await cartCollection.findOne({ userid: userData });
@@ -163,9 +170,9 @@ const cart = {
         const walletData=await walletCollection
         .findOne({userid: userData})
         .populate("orderDetails.orderid")
-        // console.log("wallettttttttttttttttttttttttttttttttttt"+walletData);
+        console.log("walletDataaaaa"+walletData);
 
-        const totalWallet=walletData.balance
+       
       if (cartData) {
         if(walletData){
         res.render("checkout", {
@@ -173,7 +180,7 @@ const cart = {
           title: userData,
           products: cartData,
           coupons: coupon,
-          walletAmount:totalWallet
+          walletAmount:walletData.balance
         });
       }else{
         res.render("checkout", {

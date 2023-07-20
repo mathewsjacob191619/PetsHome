@@ -233,15 +233,35 @@ const userControl = {
             console.log(error.message);
         }
     },
+    // products: async (req, res) => {
+    //     try {
+    //         const product = await productCollection.find();
+    //         // console.log(products);
+    //         res.render('product', { productdetails: product, title: req.session.user_id })
+    //     } catch (error) {
+    //         console.log(error.message);
+    //     }
+    // },
     products: async (req, res) => {
         try {
-            const product = await productCollection.find();
+            const { category, brand } = req.query;
+            const filter = {};
+    
+            // Add category and brand filters to the query if they are provided
+            if (category) {
+                filter.category = category;
+            }
+            if (brand) {
+                filter.productbrand = brand;
+            }
+    
+            const product = await productCollection.find(filter);
             // console.log(products);
             res.render('product', { productdetails: product, title: req.session.user_id })
         } catch (error) {
             console.log(error.message);
         }
-    },
+    },    
     forgotPassword: (req, res) => {
         try {
             res.render('forgotpassword')

@@ -126,10 +126,22 @@
                                             <tr>
                                                 <td><a href="#">
                                                         <%=product.productid.productname%>
-                                                    </a></td>
-                                                <td class="proprice">₹
-                                                    <%=product.productid.productprice*product.quantity%>.00
+                                                    </a>
                                                 </td>
+                                                <% if (product.productid.offerpercentage > 0) {%>
+
+                                                    <td class="proprice">₹
+                                                    <%=product.productid.offerprice *product.quantity %>.00
+                                                </td>
+                                               <%} else {%> 
+                                                    <td class="proprice">₹
+                                                        <%=product.productid.productprice*product.quantity%>.00
+                                                    </td>
+                                                    
+                                                    <% } %>
+
+
+                                                
                                             </tr>
                                             <%})%>
                                     </tbody>
@@ -251,14 +263,16 @@
             function update_amounts() {
                 let subtotal = 0;
                 $("#protable > tbody > tr").each(function () {
+                    // productprice
                     let price = $(this)
                         .find(".proprice")
                         .text()
                         .replace(/[^\d\.]/g, "");
+                        // productprice
                     let total = parseInt(price);
                     //   console.log(price);
                     subtotal += total;
-                    //   console.log(subtotal);
+                    //   console.log("subtotal"+subtotal);
                 });
 
                 let couponrs = $('#discount')
@@ -279,6 +293,7 @@
 
                     var subtotal = $("#subtotal").text().replace(/[^\d\.]/g, "");
                     subtotal = parseInt(subtotal);
+                    // console.log("subbbb"+subtotal);
                     let data = { code: coupon, amount: subtotal };
                     console.log(data)
                     $.ajax({
@@ -329,12 +344,13 @@
                     var coupon = $("#couponcode").val();
 
                     var productPrice = $('#proprice')
+                    // console.log("proooo"+productPrice);
                     var purchase = $('#finaltotal').text().replace(/[^\d\.]/g, "");
                     var couponamount = $("#discount").text().replace(/[^\d\.]/g, "");
-                    console.log(productPrice);
-                    console.log("purchase " + purchase);
-                    console.log("couponamount " + couponamount);
-                    console.log("addressId " + addressId);
+                    // console.log(productPrice);
+                    // console.log("purchase " + purchase);
+                    // console.log("couponamount " + couponamount);
+                    // console.log("addressId " + addressId);
 
                     var data = {
                         paymentmethod: paymentMethod,
