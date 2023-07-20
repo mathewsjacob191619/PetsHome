@@ -371,7 +371,7 @@ updateStatus: async (req, res) => {
 listCoupon: async (req, res) => {
   try {
     let coupon = await couponModel.find({});
-    res.render("couponList", { coupons: coupon });
+    res.render("couponlist", { coupons: coupon });
   } catch (error) {
     res.render("error", { error: error.message });
   }
