@@ -5,28 +5,7 @@
         <h2 class="content-title">User list</h2>
     </div>
     <div class="card mb-4">
-        <!-- <header class="card-header"> -->
-            <!-- <div class="row gx-3">
-                <div class="col-lg-4 col-md-6 me-auto">
-                    <input type="text" placeholder="Search..." class="form-control">
-                </div>
-                <div class="col-lg-2 col-md-3 col-6">
-                    <select class="form-select">
-                        <option>Status</option>
-                        <option>Active</option>
-                        <option>Disabled</option>
-                        <option>Show all</option>
-                    </select>
-                </div>
-                <div class="col-lg-2 col-md-3 col-6">
-                    <select class="form-select">
-                        <option>Show 20</option>
-                        <option>Show 30</option>
-                        <option>Show 40</option>
-                    </select>
-                </div>
-            </div> -->
-        <!-- </header> card-header end// -->
+       
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover" >
@@ -55,7 +34,7 @@
                             </td>
                             <td><%=items.email %></td>
                             <td><%=items.phone %></td>
-                            <td>08.07.2020</td>
+                            <td>22.07.2023</td>
                             <td class="text-end">
                                 <% if(items.isBlocked === 0){%>
                                 <p   onclick="handleUserAction('<%= items._id %>',1)" class="btn btn-sm btn-brand rounded font-sm mt-15" style="background-color: red;" id="btnAction">Block</p>

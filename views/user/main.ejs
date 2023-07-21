@@ -54,6 +54,7 @@
                                             <%if(product.productquantity == 0) {%>
                                                  <span class="product-label label-out">Out of Stock</span>
                                                  <%}%>
+                                                    
                                             <a href="/productView?id=<%=product._id%>">
                                                 <img src="/uploads/<%=product.productimages[0] %>" alt="Product image" class="product-image">
                                                 <img src="/uploads/<%=product.productimages[1] %>" alt="Product image" class="product-image-hover">
@@ -73,9 +74,7 @@
                                                 <a href="#"><%= product.productcategory %></a>
                                             </div><!-- End .product-cat -->
                                             <h3 class="product-title"><a href=""><%= product.productname %></a></h3><!-- End .product-title -->
-                                            <div class="product-price">
-                                                $14.99
-                                            </div><!-- End .product-price -->
+                                            <div class="product-price"><%= product.productprice %></div><!-- End .product-price -->
 
                                             <!-- <div class="product-nav product-nav-thumbs">
                                                 <a href="#" class="active">

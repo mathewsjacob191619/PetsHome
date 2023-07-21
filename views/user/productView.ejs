@@ -2,27 +2,7 @@
 
 
 <main class="main">
-    <!-- <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0"> -->
-        <!-- <div class="container d-flex align-items-center"> -->
-            <!-- <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Products</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Default</li>
-            </ol>
-
-            <nav class="product-pager ml-auto" aria-label="Product">
-                <a class="product-pager-link product-pager-prev" href="#" aria-label="Previous" tabindex="-1">
-                    <i class="icon-angle-left"></i>
-                    <span>Prev</span>
-                </a>
-
-                <a class="product-pager-link product-pager-next" href="#" aria-label="Next" tabindex="-1">
-                    <span>Next</span>
-                    <i class="icon-angle-right"></i>
-                </a>
-            </nav>End .pager-nav -->
-        <!-- </div>End .container -->
-    <!-- </nav>End .breadcrumb-nav -->
+   
 
     <div class="page-content">
         <div class="container">
@@ -78,21 +58,7 @@
                                 <p><%=product.productdescription%></p>
                             </div><!-- End .product-content -->
 
-                            <!-- <div class="details-filter-row details-row-size">
-                                <label>Color:</label>
-
-                                <div class="product-nav product-nav-dots">
-                                    <a href="#" class="active" style="background: #343b43;"><span class="sr-only">Color name</span></a>
-                                    <a href="#" style="background: #fb1230;"><span class="sr-only">Color name</span></a>
-                                </div>
-                            </div> -->
-                            
-                            <!-- <div class="details-filter-row details-row-size">
-                                <label for="qty">Qty:</label>
-                                <div class="product-details-quantity">
-                                    <input type="number" id="qty" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
-                                </div>
-                            </div> -->
+                           
 
                             <div class="product-details-action">
                                 <a href="/addToCart?id=<%=product._id%>" class="btn-product btn-cart"><span>add to cart</span></a>
@@ -120,5 +86,6 @@
         </div><!-- End .container -->
     </div><!-- End .page-content -->
 </main><!-- End .main -->
+
 
 <%-include('../partials/footer')-%>
