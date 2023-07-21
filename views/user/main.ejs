@@ -54,7 +54,7 @@
                                             <%if(product.productquantity == 0) {%>
                                                  <span class="product-label label-out">Out of Stock</span>
                                                  <%}%>
-                                            <a href="">
+                                            <a href="/productView?id=<%=product._id%>">
                                                 <img src="/uploads/<%=product.productimages[0] %>" alt="Product image" class="product-image">
                                                 <img src="/uploads/<%=product.productimages[1] %>" alt="Product image" class="product-image-hover">
                                             </a>
